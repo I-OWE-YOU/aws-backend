@@ -2,6 +2,10 @@ import axios from 'axios';
 import { failure, success } from '../libs/response-lib';
 
 export const main = async event => {
+  /**
+   * @property {string} postalCode
+   * @property {string} houseNumber
+   */
   const { postalCode, houseNumber } = event.pathParameters;
   const addressEndpoint = process.env.AZURE_MAPS_ADDRESS_ENDPOINT;
   const clientId = process.env.AZURE_MAPS_CLIENT_ID;
@@ -22,6 +26,7 @@ export const main = async event => {
       }
     );
 
+    /** @type {import('../typeings/address).Address} */
     const data = response.data.results[0];
 
     const address = {
