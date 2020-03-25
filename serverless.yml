@@ -1,7 +1,7 @@
 # NOTE: update this with your service name
 service: backend-api
 
-# Create an optimized package for our functions 
+# Create an optimized package for our functions
 package:
   individually: true
 
@@ -24,9 +24,12 @@ provider:
   #  SAMPLE_ENV_VAR: ${env:SAMPLE_ENV_VAR}
 
 functions:
-  hello:
-    handler: handler.hello
+  # Defines an HTTP API endpoint that calls the main function in address/get.js
+  # - path: url path is /address/{postalCode}/{houseNumber}
+  # - method: GET request
+  addressGet:
+    handler: address/get.main
     events:
       - http:
-          path: hello
+          path: address/{postalCode}/{houseNumber}
           method: get
