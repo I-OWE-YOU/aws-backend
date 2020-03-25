@@ -26,7 +26,7 @@ export const main = async event => {
       }
     );
 
-    /** @type {import('../typeings/address).Address} */
+    /** @type {import('../typings/address).Address} */
     const data = response.data.results[0];
 
     const address = {
@@ -41,6 +41,6 @@ export const main = async event => {
     return success(address);
   } catch (e) {
     console.log(e);
-    return failure('There has been an errpr');
+    return failure('There has been an error');
   }
 };
