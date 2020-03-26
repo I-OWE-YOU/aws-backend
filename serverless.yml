@@ -58,7 +58,7 @@ functions:
     handler: company/get.main
     events:
       - http:
-          path: company
+          path: company/{id}
           method: get
 
   # Defines an HTTP API endpoint that calls the main function in company/create.js
