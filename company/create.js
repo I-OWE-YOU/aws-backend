@@ -26,6 +26,7 @@ export const main = async event => {
       firstName: data.contactFirstName,
       lastName: data.companyLastName,
       iban: data.iban,
+      kvk: data.kvk,
       city: data.address.city,
       houseNumber: data.address.houseNumber,
       street: data.address.street,

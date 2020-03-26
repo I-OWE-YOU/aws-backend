@@ -7,6 +7,7 @@
  * @property {string} contactFirstName
  * @property {string} contactLastName
  * @property {string} iban
+ * @property {number} kvk
  * @property {Address} address
  */
 

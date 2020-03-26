@@ -15,6 +15,15 @@ export const createCompanySchema = Joi.object({
   contactFirstName: Joi.string().required(),
   companyLastName: Joi.string().required(),
   iban: Joi.string().required(),
+  kvk: Joi.number()
+    .integer()
+    .min(10000000)
+    .max(99999999)
+    .required()
+    .messages({
+      'number.min': '"kvk" should be 8 digits long',
+      'number.max': '"kvk" should be 8 digits long'
+    }),
   address: Joi.object({
     city: Joi.string().required(),
     houseNumber: Joi.string().required(),
