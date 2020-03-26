@@ -33,3 +33,23 @@ functions:
       - http:
           path: address/{postalCode}/{houseNumber}
           method: get
+
+  # Defines an HTTP API endpoint that calls the main function in company/get.js
+  # - path: url path is /company
+  # - method: GET request
+  companyGet:
+    handler: company/get.main
+    events:
+      - http:
+          path: company
+          method: get
+
+  # Defines an HTTP API endpoint that calls the main function in company/create.js
+  # - path: url path is /company
+  # - method: POST request
+  companyCreate:
+    handler: company/create.main
+    events:
+      - http:
+          path: company
+          method: post
