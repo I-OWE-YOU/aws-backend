@@ -64,9 +64,14 @@ functions:
   # Defines an HTTP API endpoint that calls the main function in company/create.js
   # - path: url path is /company
   # - method: POST request
+  # - cors: enabled CORS (Cross-Origin Resource Sharing) for browser cross
+  #     domain api call
+  # - authorizer: authenticate using the AWS IAM role
   companyCreate:
     handler: company/create.main
     events:
       - http:
           path: company
           method: post
+          cors: true
+          authorizer: aws_iam
