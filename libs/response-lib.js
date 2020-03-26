@@ -10,6 +10,10 @@ export function validationError(body) {
   return buildResponse(422, { errors: body });
 }
 
+export function resourceNotFound(body) {
+  return buildResponse(404, body);
+}
+
 function buildResponse(statusCode, body) {
   return {
     statusCode,
