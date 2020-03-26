@@ -7,7 +7,7 @@ export function failure(body) {
 }
 
 export function validationError(body) {
-  return buildResponse(400, { errors: body });
+  return buildResponse(422, { errors: body });
 }
 
 function buildResponse(statusCode, body) {
