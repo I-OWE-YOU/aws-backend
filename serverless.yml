@@ -12,16 +12,33 @@ plugins:
 
 provider:
   name: aws
-  runtime: nodejs10.x
+  runtime: nodejs12.x
   stage: dev
-  region: us-east-1
+  region: eu-west-1
   # To load environment variables externally
   # rename env.example to .env and uncomment
   # the following line. Also, make sure to not
   # commit your .env.
   #
-  #environment:
-  #  SAMPLE_ENV_VAR: ${env:SAMPLE_ENV_VAR}
+  environment:
+    AZURE_MAPS_KEY: ${env:AZURE_MAPS_KEY}
+    AZURE_MAPS_CLIENT_ID: ${env:AZURE_MAPS_CLIENT_ID}
+    AZURE_MAPS_ADDRESS_ENDPOINT: ${env:AZURE_MAPS_ADDRESS_ENDPOINT}
+    COMPANIES_TABLE_NAME: ${COMPANIES_TABLE_NAME}
+
+  # 'iamRoleStatements' defines the permission policy for the Lambda function.
+  # In this case Lambda functions are granted with permissions to access DynamoDB.
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:DescribeTable
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource: 'arn:aws:dynamodb:eu-west-1:*:*'
 
 functions:
   # Defines an HTTP API endpoint that calls the main function in address/get.js
