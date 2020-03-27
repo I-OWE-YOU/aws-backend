@@ -54,7 +54,7 @@ functions:
     handler: company/get.main
     events:
       - http:
-          path: company
+          path: company/{id}
           method: get
   companyCreate:
     handler: company/create.main
