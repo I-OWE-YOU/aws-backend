@@ -64,6 +64,16 @@ functions:
           method: post
           cors: true
           authorizer: aws_iam
+
+  companyUpdate:
+    handler: company/update.main
+    events:
+      - http:
+          path: company/{id}
+          method: put
+          cors: true
+          authorizer: aws_iam
+
   testCognito:
     handler: handler.test1
     events:
@@ -73,5 +83,5 @@ functions:
           cors: true
           authorizer: aws_iam
 resources:
-# Cognito
-      - ${file(resources/cognito.yml)}
+  # Cognito
+  - ${file(resources/cognito.yml)}

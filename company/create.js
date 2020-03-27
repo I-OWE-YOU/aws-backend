@@ -1,14 +1,14 @@
 import { v1 as uuidv1 } from 'uuid';
 import * as dynamoDbLib from '../libs/dynamodb-lib';
 import { failure, success, validationError } from '../libs/response-lib';
-import { createCompanySchema } from '../validation/createCompanySchema';
+import { companySchema } from '../validation/companySchema';
 
 export const main = async event => {
   /** @type {import('../typings/company).Company} */
   const data = JSON.parse(event.body);
 
   try {
-    await createCompanySchema.validateAsync(data, { abortEarly: false });
+    await companySchema('required').validateAsync(data, { abortEarly: false });
   } catch (e) {
     console.log(e);
     const errorMessages = e.details.map(detail => detail.message);
