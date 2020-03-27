@@ -1,38 +1,42 @@
 /**
  * @typedef {Object} Address
- * @property {string} type
- * @property {string} id
- * @property {number} score
- * @property {AddressDetails} address
- * @property {Position} position
- * @property {Viewport}viewport
+ * @property {Standard} standard
+ * @property {String} longt
+ * @property {String} latt
+ * @property {Alt} alt
  */
 
 /**
- * @typedef {Object} AddressDetails
- * @property {string} streetName
- * @property {string} municipalitySubdivision
- * @property {string} municipality
- * @property {string} countrySubdivision
- * @property {string} postalCode
- * @property {string} extendedPostalCode
- * @property {string} countryCode
- * @property {string} country
- * @property {string} countryCodeISO3
- * @property {string} freeformAddress
- * @property {string} localName
+ * @typedef {Object} Standard
+ * @property {String} addresst
+ * @property {String} stnumber
+ * @property {Object} region
+ * @property {String} postal
+ * @property {String} city
+ * @property {String} prov
+ * @property {String} countryname
+ * @property {string} confidence
  */
 
 /**
- * @typedef {Object} Position
- * @property {number} lat
- * @property {number} lon
+ * @typedef {Object} Alt
+ * @type {Loc} loc
  */
 
 /**
- * @typedef {Object} Viewport
- * @property {Position} topLeftPoint
- * @property {Position} btmRightPoint
+ * @typedef {Object} Loc
+ * @type {Streets} streets
+ */
+
+/**
+ * @typedef {Object} Streets
+ * @type {StreetAddress} street_address
+ */
+
+/**
+ * @typedef {Object} StreetAddress
+ * @type {String} staddress
+ * @type {String} stnumber
  */
 
 exports.empty = {};

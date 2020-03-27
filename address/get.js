@@ -7,40 +7,36 @@ export const main = async event => {
    * @property {string} houseNumber
    */
   const { postalCode, houseNumber } = event.pathParameters;
-  const addressEndpoint = process.env.AZURE_MAPS_ADDRESS_ENDPOINT;
-  const clientId = process.env.AZURE_MAPS_CLIENT_ID;
-  const mapsKey = process.env.AZURE_MAPS_KEY;
+  const geocodeEndpoint = process.env.GEOCODE_ENDPOINT;
+  const apiKey = process.env.GEOCODE_API_KEY;
+  const region = process.env.GEOCODE_REGION;
 
   try {
-    const response = await axios.get(
-      `${addressEndpoint}?countryCode=NL&api-version=1.0`,
-      {
-        headers: {
-          'x-ms-client-id': clientId
-        },
-        params: {
-          'subscription-key': mapsKey,
-          postalCode: postalCode.replace(' ', ''),
-          houseNumber
-        }
+    const response = await axios.get(geocodeEndpoint, {
+      params: {
+        auth: apiKey,
+        locate: postalCode,
+        stnumber: houseNumber,
+        region: region,
+        json: '1'
       }
-    );
+    });
 
     /** @type {import('../typings/address).Address} */
-    const data = response.data.results[0];
+    const data = response.data;
 
     const address = {
-      city: data.address.localName,
+      city: data.standard.city,
       houseNumber: houseNumber,
-      latitude: data.position.lat,
-      longitude: data.position.lon,
-      street: data.address.streetName,
+      latitude: data.latt,
+      longitude: data.longt,
+      street: data.alt.loc.streets.street_address.staddress,
       zipCode: postalCode
     };
 
     return success(address);
   } catch (e) {
-    console.log(e);
+    console.error(e);
     return failure('There has been an error');
   }
 };
