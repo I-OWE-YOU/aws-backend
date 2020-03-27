@@ -74,6 +74,15 @@ functions:
           cors: true
           authorizer: aws_iam
 
+  companyDelete:
+    handler: company/delete.main
+    events:
+      - http:
+          path: company/{id}
+          method: delete
+          cors: true
+          authroizer: aws_iam
+
   testCognito:
     handler: handler.test1
     events:
