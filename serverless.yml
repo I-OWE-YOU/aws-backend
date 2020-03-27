@@ -75,3 +75,12 @@ functions:
           method: post
           cors: true
           authorizer: aws_iam
+
+  companyUpdate:
+    handler: company/update.main
+    events:
+      - http:
+          path: company/{id}
+          method: put
+          cors: true
+          authorizer: aws_iam
