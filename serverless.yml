@@ -50,23 +50,12 @@ functions:
       - http:
           path: address/{postalCode}/{houseNumber}
           method: get
-
-  # Defines an HTTP API endpoint that calls the main function in company/get.js
-  # - path: url path is /company
-  # - method: GET request
   companyGet:
     handler: company/get.main
     events:
       - http:
           path: company
           method: get
-
-  # Defines an HTTP API endpoint that calls the main function in company/create.js
-  # - path: url path is /company
-  # - method: POST request
-  # - cors: enabled CORS (Cross-Origin Resource Sharing) for browser cross
-  #     domain api call
-  # - authorizer: authenticate using the AWS IAM role
   companyCreate:
     handler: company/create.main
     events:
@@ -75,3 +64,14 @@ functions:
           method: post
           cors: true
           authorizer: aws_iam
+  testCognito:
+    handler: handler.test1
+    events:
+      - http:
+          path: test1
+          method: get
+          cors: true
+          authorizer: aws_iam
+resources:
+# Cognito
+      - ${file(resources/cognito.yml)}
