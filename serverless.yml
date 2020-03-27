@@ -9,6 +9,8 @@ plugins:
   - serverless-bundle # Package our functions with Webpack
   - serverless-offline
   - serverless-dotenv-plugin # Load .env as environment variables
+  - serverless-pseudo-parameters
+
 
 provider:
   name: aws
@@ -91,6 +93,7 @@ functions:
           method: get
           cors: true
           authorizer: aws_iam
+  preSignupLambdaFunction:
+    handler: cognito/autoConfirmUser.main
 resources:
-  # Cognito
-  - ${file(resources/cognito.yml)}
+      - ${file(resources/cognito.yml)}

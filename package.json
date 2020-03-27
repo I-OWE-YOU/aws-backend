@@ -20,7 +20,11 @@
     "prettier": "^2.0.2",
     "serverless-bundle": "^1.3.2",
     "serverless-dotenv-plugin": "^2.3.2",
+    "serverless-pseudo-parameters": "^2.5.0",
     "serverless-offline": "^6.1.2",
     "uuid": "^7.0.2"
+  },
+  "dependencies": {
+    "serverless-pseudo-parameters": "^2.5.0"
   }
 }
