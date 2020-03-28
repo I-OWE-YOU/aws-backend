@@ -65,7 +65,10 @@ functions:
           path: company
           method: post
           cors: true
-          authorizer: aws_iam
+          authorizer: 
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: apiGatewayAuthorizer
 
   companyUpdate:
     handler: company/update.main
@@ -74,7 +77,10 @@ functions:
           path: company/{id}
           method: put
           cors: true
-          authorizer: aws_iam
+          authorizer: 
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: apiGatewayAuthorizer
 
   companyDelete:
     handler: company/delete.main
@@ -83,7 +89,10 @@ functions:
           path: company/{id}
           method: delete
           cors: true
-          authroizer: aws_iam
+          authorizer: 
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: apiGatewayAuthorizer
 
   testCognito:
     handler: handler.test1
@@ -92,8 +101,11 @@ functions:
           path: test1
           method: get
           cors: true
-          authorizer: aws_iam
+          authorizer: 
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: apiGatewayAuthorizer
   preSignupLambdaFunction:
     handler: cognito/autoConfirmUser.main
 resources:
-      - ${file(resources/cognito.yml)}
+    - ${file(resources/cognito.yml)}
