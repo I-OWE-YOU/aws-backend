@@ -7,6 +7,7 @@ Resources:
         UserPoolName: cognito_sls_backend_user_pool
         LambdaConfig:
           PreSignUp: "arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:backend-api-dev-preSignupLambdaFunction"
+          PostConfirmation: "arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:backend-api-dev-userCreate"
         Policies:
           PasswordPolicy:
             MinimumLength: 7
@@ -22,6 +23,14 @@ Resources:
       Properties: 
         Action: lambda:InvokeFunction
         FunctionName: "arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:backend-api-dev-preSignupLambdaFunction"
+        Principal: cognito-idp.amazonaws.com
+        SourceArn: !Sub 'arn:#{AWS::Partition}:cognito-idp:#{AWS::Region}:#{AWS::AccountId}:userpool/#{CognitoUserPool}'
+        
+    LambdaCreateUserExecutionPermission:
+      Type: AWS::Lambda::Permission
+      Properties: 
+        Action: lambda:InvokeFunction
+        FunctionName: "arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:backend-api-dev-userCreate"
         Principal: cognito-idp.amazonaws.com
         SourceArn: !Sub 'arn:#{AWS::Partition}:cognito-idp:#{AWS::Region}:#{AWS::AccountId}:userpool/#{CognitoUserPool}'
 

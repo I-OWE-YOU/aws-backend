@@ -93,7 +93,10 @@ functions:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: apiGatewayAuthorizer
-
+              
+  userCreate:
+    handler: user/create.main
+    
   testCognito:
     handler: handler.test1
     events:
