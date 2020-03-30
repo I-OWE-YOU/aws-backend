@@ -3,7 +3,6 @@ import Joi from '@hapi/joi';
 export const companySchema = presenceMode =>
   Joi.object({
     companyName: Joi.string()
-      .alphanum()
       .min(3)
       .max(30)
       .presence(presenceMode),
