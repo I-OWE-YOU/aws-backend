@@ -26,7 +26,8 @@ provider:
     GEOCODE_API_KEY: ${env:GEOCODE_API_KEY}
     GEOCODE_ENDPOINT: ${env:GEOCODE_ENDPOINT}
     GEOCODE_REGION: ${env:GEOCODE_REGION}
-    COMPANIES_TABLE_NAME: ${COMPANIES_TABLE_NAME}
+    COMPANIES_TABLE_NAME: ${env:COMPANIES_TABLE_NAME}
+    USERS_TABLE_NAME: ${env:USERS_TABLE_NAME}
 
   # 'iamRoleStatements' defines the permission policy for the Lambda function.
   # In this case Lambda functions are granted with permissions to access DynamoDB.
