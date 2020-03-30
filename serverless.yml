@@ -59,6 +59,13 @@ functions:
       - http:
           path: company/{id}
           method: get
+  companiesGet:
+    handler: company/getAll.main
+    events:
+      - http:
+          path: companies
+          method: get
+          cors: true
   companyCreate:
     handler: company/create.main
     events:
