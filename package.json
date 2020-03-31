@@ -15,13 +15,15 @@
   "devDependencies": {
     "@hapi/joi": "^17.1.1",
     "@types/hapi__joi": "^16.0.12",
+    "@types/stripe": "^7.13.22",
     "aws-sdk": "^2.645.0",
     "axios": "^0.19.2",
     "prettier": "^2.0.2",
     "serverless-bundle": "^1.3.2",
     "serverless-dotenv-plugin": "^2.3.2",
-    "serverless-pseudo-parameters": "^2.5.0",
     "serverless-offline": "^6.1.2",
+    "serverless-pseudo-parameters": "^2.5.0",
+    "stripe": "^8.38.0",
     "uuid": "^7.0.2"
   },
   "dependencies": {
