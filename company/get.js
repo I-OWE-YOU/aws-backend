@@ -8,7 +8,8 @@ export const main = async event => {
     TableName: process.env.COMPANIES_TABLE_NAME,
     Key: {
       companyId
-    }
+    },
+    ProjectionExpression: 'email, companyId, companyName, lastName, firstName, city, stripeUserId, longitude, iban, houseNumber, acceptedTerms, kvk, latitude, zipCode, street'
   };
 
   try {
