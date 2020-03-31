@@ -14,11 +14,17 @@ export function resourceNotFound(body) {
   return buildResponse(404, body);
 }
 
-function buildResponse(statusCode, body) {
+export function redirect(location) {
+  return buildResponse(301, null, { Location: location });
+}
+
+function buildResponse(statusCode, body, headers = {}) {
   return {
     statusCode,
     headers: {
-      'Access-Control-Allow-Origin': '*'
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Credentials': true,
+      ...headers
     },
     body: JSON.stringify(body)
   };
