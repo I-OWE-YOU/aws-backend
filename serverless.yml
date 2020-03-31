@@ -71,15 +71,6 @@ functions:
           cors: true
   companyCreate:
     handler: company/create.main
-    events:
-      - http:
-          path: company
-          method: post
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: apiGatewayAuthorizer
 
   companyUpdate:
     handler: company/update.main
