@@ -15,8 +15,8 @@ export const main = async event => {
 
   try {
     await dynamoDbLib.call('put', params);
-    return event;
   } catch (e) {
-    return event;
+    console.error(e);
   }
+  return event;
 };
