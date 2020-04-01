@@ -21,6 +21,7 @@ export const main = async event => {
       return resourceNotFound({ status: false, error: 'Item not found!' });
     }
   } catch (e) {
+    console.error(e);
     return failure({ status: false });
   }
 
