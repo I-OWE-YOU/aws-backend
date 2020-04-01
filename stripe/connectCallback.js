@@ -1,12 +1,36 @@
 import Stripe from 'stripe';
-import { failure, redirect } from '../libs/response-lib';
+import { failure, redirect, redirectWithError } from '../libs/response-lib';
 import * as dynamoDbLib from '../libs/dynamodb-lib';
 
 export const main = async event => {
   /** @type {string} code - authorization code returned from Stripe */
   const code = event.queryStringParameters.code;
-  /** @type {string} companyId - the company id to identify the resource in the db */
-  const companyId = event.queryStringParameters.state;
+  const stripeConnectToken = event.queryStringParameters.state;
+  const params = {
+    TableName: process.env.COMPANIES_TABLE_NAME,
+    ExpressionAttributeValues: {
+      ':stripeConnectToken': stripeConnectToken
+    },
+    FilterExpression: 'stripeConnectToken = :stripeConnectToken'
+  };
+
+  let company;
+
+  try {
+    const response = await dynamoDbLib.call('scan', params);
+
+    if (response.Count === 0) {
+      const error = 'resource_not_found';
+      const errorMsg = 'The company does not exist in the DB';
+      return redirectWithError(process.env.APPLICATION_URL, error, errorMsg);
+    }
+
+    company = response.Items[0];
+  } catch (e) {
+    console.error(e);
+    return failure({ status: false });
+  }
+
   /** @type {string} error */
   const error = event.queryStringParameters.error;
   const stripe = Stripe(process.env.STRIPE_API_SECRET_KEY);
@@ -15,11 +39,9 @@ export const main = async event => {
     /** @type {string} error_description */
     const errorMsg = event.queryStringParameters.error_description;
 
-    await removeStripeConnectToken(companyId);
+    await removeStripeConnectToken(company.companyId);
 
-    return redirect(
-      `${process.env.APPLICATION_URL}?error=${error}&error_description=${errorMsg}`
-    );
+    return redirectWithError(process.env.APPLICATION_URL, errorMsg, errorMsg);
   }
 
   const response = await stripe.oauth.token({
@@ -32,21 +54,25 @@ export const main = async event => {
   }
 
   const stripeUserId = response.stripe_user_id;
-  const params = {
+  const updateParams = {
     TableName: process.env.COMPANIES_TABLE_NAME,
     Key: {
-      companyId
+      companyId: company.companyId
     },
-    UpdateExpression:
-      'SET stripeUserId = :stripeUserId, stripeConnectToken = ""',
-    ExpressionAttributeValues: {
-      ':stripeUserId': stripeUserId
+    AttributeUpdates: {
+      stripeUserId: {
+        Value: stripeUserId,
+        Action: 'PUT'
+      },
+      stripeConnectToken: {
+        Action: 'DELETE'
+      }
     },
     ReturnValues: 'ALL_NEW'
   };
 
   try {
-    await dynamoDbLib.call('update', params);
+    await dynamoDbLib.call('update', updateParams);
     return redirect(process.env.APPLICATION_URL);
   } catch (e) {
     console.error(e);
@@ -60,7 +86,11 @@ const removeStripeConnectToken = async companyId => {
     Key: {
       companyId
     },
-    UpdateExpression: 'SET stripeConnectToken = ""',
+    AttributeUpdates: {
+      stripeConnectToken: {
+        Action: 'DELETE'
+      }
+    },
     ReturnValues: 'ALL_NEW'
   };
 
