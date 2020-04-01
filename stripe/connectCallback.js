@@ -41,7 +41,7 @@ export const main = async event => {
 
     await removeStripeConnectToken(company.companyId);
 
-    return redirectWithError(process.env.APPLICATION_URL, errorMsg, errorMsg);
+    return redirectWithError(process.env.APPLICATION_URL, error, errorMsg);
   }
 
   const response = await stripe.oauth.token({
