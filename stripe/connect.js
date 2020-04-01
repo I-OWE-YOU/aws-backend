@@ -4,8 +4,8 @@ import { failure, resourceNotFound, success } from '../libs/response-lib';
 import * as dynamoDbLib from '../libs/dynamodb-lib';
 
 export const main = async event => {
-  // TODO: This should be taken from Cognito
-  const userId = 'dc8fc73b-c76f-4267-9fc1-3ff7bad537dd';
+  /** @type {string} userId */
+  const userId = event.requestContext.authorizer.claims.sub;
   const params = {
     TableName: process.env.COMPANIES_TABLE_NAME,
     ExpressionAttributeValues: {
@@ -13,8 +13,6 @@ export const main = async event => {
     },
     FilterExpression: 'userId = :userId'
   };
-
-  return success(event);
 
   let company;
 
