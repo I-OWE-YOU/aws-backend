@@ -18,6 +18,11 @@ export function redirect(location) {
   return buildResponse(301, null, { Location: location });
 }
 
+export function redirectWithError(location, error, errorMsg) {
+  const url = `${location}?error=${error}&error_description=${errorMsg}`;
+  return redirect(url);
+}
+
 function buildResponse(statusCode, body, headers = {}) {
   return {
     statusCode,
