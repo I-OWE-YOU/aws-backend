@@ -14,18 +14,20 @@ export const main = async event => {
     FilterExpression: 'stripeConnectToken = :stripeConnectToken'
   };
 
+  console.log('Get the company based on the unique key provided by Stripe');
   let company;
-
   try {
     const response = await dynamoDbLib.call('scan', params);
 
     if (response.Count === 0) {
       const error = 'resource_not_found';
       const errorMsg = 'The company does not exist in the DB';
+      console.error({ error, errorMsg, stripeConnectToken });
       return redirectWithError(process.env.APPLICATION_URL, error, errorMsg);
     }
 
     company = response.Items[0];
+    console.log(`Successfully fetch the company with ID: ${company.companyId}`);
   } catch (e) {
     console.error(e);
     return failure({ status: false });
@@ -33,25 +35,34 @@ export const main = async event => {
 
   /** @type {string} error */
   const error = event.queryStringParameters.error;
+  console.log('Initialize Stripe');
   const stripe = Stripe(process.env.STRIPE_API_SECRET_KEY);
 
   if (error) {
     /** @type {string} error_description */
     const errorMsg = event.queryStringParameters.error_description;
+    console.error({ error, errorMsg, companyId: company.companyId });
 
     await removeStripeConnectToken(company.companyId);
 
     return redirectWithError(process.env.APPLICATION_URL, error, errorMsg);
   }
 
+  console.log('Try to connect the Company to Stripe');
   const response = await stripe.oauth.token({
     grant_type: 'authorization_code',
     code
   });
 
   if (response.error) {
+    console.error({
+      error: response.error,
+      errorMsg: response.error_description
+    });
     return failure(response.error_description);
   }
+
+  console.log('Connection with Stripe was successful');
 
   const stripeUserId = response.stripe_user_id;
   const updateParams = {
@@ -71,8 +82,15 @@ export const main = async event => {
     ReturnValues: 'ALL_NEW'
   };
 
+  console.log(
+    `Update the company with ID: ${company.companyId} with the connected Stripe account: ${stripeUserId}`
+  );
+
   try {
     await dynamoDbLib.call('update', updateParams);
+
+    console.log('Successfully update the company with Stripe account ID');
+
     return redirect(process.env.APPLICATION_URL);
   } catch (e) {
     console.error(e);
@@ -94,8 +112,11 @@ const removeStripeConnectToken = async companyId => {
     ReturnValues: 'ALL_NEW'
   };
 
+  console.log('Remove the temporary token from the database');
+
   try {
     await dynamoDbLib.call('update', params);
+    console.log('Temporary token successfully removed');
   } catch (e) {
     console.error(e);
   }
