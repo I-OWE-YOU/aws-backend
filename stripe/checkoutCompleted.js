@@ -17,7 +17,7 @@ export const main = async event => {
       process.env.STRIPE_WEBHOOK_CHECKOUT_COMPLETED_SECRET_KEY // We are getting this one from Stripe Dashboard, when a webhook is created
     );
   } catch (err) {
-    console.error(err);
+    console.error({ err, body: JSON.parse(event.body) });
     return badRequest(`Webhook Error: ${err.message}`);
   }
 
@@ -29,6 +29,7 @@ export const main = async event => {
     try {
       await handleCheckoutSession(session);
     } catch (e) {
+      console.error(e);
       return failure(e);
     }
   }
@@ -55,5 +56,6 @@ const handleCheckoutSession = async session => {
     await dynamoDbLib.call('put', params);
   } catch (e) {
     console.error(e);
+    return failure(e);
   }
 };
