@@ -27,12 +27,14 @@ provider:
     GEOCODE_REGION: ${env:GEOCODE_REGION}
     COMPANIES_TABLE_NAME: ${env:COMPANIES_TABLE_NAME}
     USERS_TABLE_NAME: ${env:USERS_TABLE_NAME}
+    COUPONS_TABLE_NAME: ${env:COUPONS_TABLE_NAME}
     STRIPE_API_SECRET_KEY: ${env:STRIPE_API_SECRET_KEY}
     STRIPE_API_CLIENT_ID: ${env:STRIPE_API_CLIENT_ID}
     STRIPE_CONNECT_URL: ${env:STRIPE_CONNECT_URL}
     APPLICATION_URL: ${env:APPLICATION_URL}
     STRIPE_CHECKOUT_REDIRECT_SUCCESS: ${env:STRIPE_CHECKOUT_REDIRECT_SUCCESS}
     STRIPE_CHECKOUT_REDIRECT_CANCEL: ${env:STRIPE_CHECKOUT_REDIRECT_CANCEL}
+    STRIPE_WEBHOOK_CHECKOUT_COMPLETED_SECRET_KEY: ${env:STRIPE_WEBHOOK_CHECKOUT_COMPLETED_SECRET_KEY}
 
   # 'iamRoleStatements' defines the permission policy for the Lambda function.
   # In this case Lambda functions are granted with permissions to access DynamoDB.
@@ -140,6 +142,13 @@ functions:
     events:
       - http:
           path: stripe/checkout-session
+          method: post
+
+  stripeCheckoutCompleted:
+    handler: stripe/checkoutCompleted.main
+    events:
+      - http:
+          path: stripe/checkout-completed
           method: post
 
 resources:
