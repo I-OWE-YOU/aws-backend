@@ -58,7 +58,7 @@ export const main = async event => {
       }
     );
 
-    console.log('Stripe checkout session successfully created')
+    console.log('Stripe checkout session successfully created');
   } catch (e) {
     console.error(e);
     return failure({ status: false });
