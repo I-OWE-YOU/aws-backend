@@ -14,7 +14,7 @@ export const main = async event => {
     webhookEvent = stripe.webhooks.constructEvent(
       event.body,
       stripeSignature,
-      process.env.STRIPE_WEBHOOK_CHECKOUT_COMPLETED_SECRET_KEY
+      process.env.STRIPE_WEBHOOK_CHECKOUT_COMPLETED_SECRET_KEY // We are getting this one from Stripe Dashboard, when a webhook is created
     );
   } catch (err) {
     console.error(err);
