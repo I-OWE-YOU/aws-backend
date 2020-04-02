@@ -31,6 +31,8 @@ provider:
     STRIPE_API_CLIENT_ID: ${env:STRIPE_API_CLIENT_ID}
     STRIPE_CONNECT_URL: ${env:STRIPE_CONNECT_URL}
     APPLICATION_URL: ${env:APPLICATION_URL}
+    STRIPE_CHECKOUT_REDIRECT_SUCCESS: ${env:STRIPE_CHECKOUT_REDIRECT_SUCCESS}
+    STRIPE_CHECKOUT_REDIRECT_CANCEL: ${env:STRIPE_CHECKOUT_REDIRECT_CANCEL}
 
   # 'iamRoleStatements' defines the permission policy for the Lambda function.
   # In this case Lambda functions are granted with permissions to access DynamoDB.
@@ -132,6 +134,13 @@ functions:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: apiGatewayAuthorizer
+
+  stripeCheckoutSession:
+    handler: stripe/createCheckoutSession.main
+    events:
+      - http:
+          path: stripe/checkout-session
+          method: post
 
 resources:
   - ${file(resources/cognito.yml)}
