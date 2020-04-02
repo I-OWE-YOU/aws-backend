@@ -48,6 +48,7 @@ const handleCheckoutSession = async session => {
       customerEmail: session.customer_email,
       amount: session.display_items[0].amount,
       paymentIntent: session.payment_intent,
+      companyId: session.metadata.companyId,
       createdAt: Date.now()
     }
   };
