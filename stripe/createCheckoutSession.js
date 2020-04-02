@@ -57,8 +57,11 @@ export const main = async event => {
         stripeAccount: stripeUserId
       }
     );
+
+    console.log('Stripe checkout session successfully created')
   } catch (e) {
     console.error(e);
+    return failure({ status: false });
   }
 
   return success(session);
