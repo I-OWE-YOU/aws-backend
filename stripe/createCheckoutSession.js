@@ -41,7 +41,7 @@ export const main = async event => {
   try {
     session = await stripe.checkout.sessions.create(
       {
-        payment_method_types: ['card'],
+        payment_method_types: ['card', 'ideal'],
         line_items: [
           {
             name: 'Coupon',
