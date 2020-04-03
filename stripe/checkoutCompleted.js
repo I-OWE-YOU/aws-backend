@@ -7,6 +7,10 @@ export const main = async event => {
   const stripeSignature = event.headers['Stripe-Signature'];
   const stripe = Stripe(process.env.STRIPE_API_SECRET_KEY);
 
+  console.log('Stripe request:');
+  console.log('Body:', JSON.parse(event.body));
+  console.log('Headers:', event.headers);
+
   let webhookEvent;
 
   console.log('Verify the event with Stripe');
