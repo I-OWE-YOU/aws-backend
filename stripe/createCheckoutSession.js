@@ -9,7 +9,7 @@ export const main = async event => {
    * @type {string} companyId - uuid
    * @type {string} customerEmail
    */
-  const { amount, companyId, customerEmail } = JSON.parse(event.body);
+  const { amount, companyId, customerEmail } = event.queryStringParameters;
 
   const params = {
     TableName: process.env.COMPANIES_TABLE_NAME,

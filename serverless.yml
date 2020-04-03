@@ -142,7 +142,7 @@ functions:
     events:
       - http:
           path: stripe/checkout-session
-          method: post
+          method: get
 
   stripeCheckoutCompleted:
     handler: stripe/checkoutCompleted.main
