@@ -23,6 +23,10 @@ export function redirectWithError(location, error, errorMsg) {
   return redirect(url);
 }
 
+export function badRequest(errorMsg) {
+  buildResponse(400, { error_description: errorMsg });
+}
+
 function buildResponse(statusCode, body, headers = {}) {
   return {
     statusCode,
