@@ -59,7 +59,8 @@ Resources:
         Name: cognitoAuthorizer
         Type: COGNITO_USER_POOLS
         IdentitySource: method.request.header.Authorization
-        RestApiId: 2mj4r3rus4
+        RestApiId:
+          Ref: 'ApiGatewayRestApi'
         ProviderARNs: 
           - 'arn:aws:cognito-idp:#{AWS::Region}:#{AWS::AccountId}:userpool/#{CognitoUserPool}'
     
