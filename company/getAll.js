@@ -1,6 +1,6 @@
 import { failure, resourceNotFound, success } from '../libs/response-lib';
 import * as dynamoDbLib from '../libs/dynamodb-lib';
-import { getEnvironment } from "../typings/environment";
+import { getEnvironment } from '../libs/utils-lib';
 
 export const main = async () => {
 	const params = {

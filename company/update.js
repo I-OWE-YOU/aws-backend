@@ -2,7 +2,7 @@ import { failure, success, validationError } from '../libs/response-lib';
 import * as dynamoDbLib from '../libs/dynamodb-lib';
 import { companySchema } from '../validation/companySchema';
 import { flattenObject } from '../libs/utils-lib';
-import { getEnvironment } from "../typings/environment";
+import { getEnvironment } from '../libs/utils-lib';
 
 export const main = async event => {
   /** @type {string} companyId - UUID */

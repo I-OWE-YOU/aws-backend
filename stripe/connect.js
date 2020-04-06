@@ -2,7 +2,7 @@ import { v1 as uuidv1 } from 'uuid';
 
 import { failure, resourceNotFound, success } from '../libs/response-lib';
 import * as dynamoDbLib from '../libs/dynamodb-lib';
-import { getEnvironment } from "../typings/environment";
+import { getEnvironment } from '../libs/utils-lib';
 
 const env = getEnvironment();
 

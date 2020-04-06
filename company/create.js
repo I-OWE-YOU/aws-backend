@@ -1,6 +1,6 @@
 import { v1 as uuidv1 } from 'uuid';
 import * as dynamoDbLib from '../libs/dynamodb-lib';
-import { getEnvironment } from "../typings/environment";
+import { getEnvironment } from '../libs/utils-lib';
 
 export const main = async event => {
   const { sub, email } = event.request.userAttributes;

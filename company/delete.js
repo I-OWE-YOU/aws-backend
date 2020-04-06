@@ -1,6 +1,6 @@
 import { failure, success } from '../libs/response-lib';
 import * as dynamoDbLib from '../libs/dynamodb-lib';
-import { getEnvironment } from "../typings/environment";
+import { getEnvironment } from '../libs/utils-lib';
 
 export const main = async event => {
   /** @type {string} companyId - UUID */
