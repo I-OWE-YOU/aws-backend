@@ -1,11 +1,12 @@
 import { v1 as uuidv1 } from 'uuid';
 import * as dynamoDbLib from '../libs/dynamodb-lib';
+import { getEnvironment } from "../typings/environment";
 
 export const main = async event => {
   const { sub, email } = event.request.userAttributes;
 
   const params = {
-    TableName: process.env.COMPANIES_TABLE_NAME,
+    TableName: getEnvironment().COMPANIES_TABLE_NAME,
     Item: {
       companyId: uuidv1(),
       userId: sub,

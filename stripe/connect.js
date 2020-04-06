@@ -2,12 +2,15 @@ import { v1 as uuidv1 } from 'uuid';
 
 import { failure, resourceNotFound, success } from '../libs/response-lib';
 import * as dynamoDbLib from '../libs/dynamodb-lib';
+import { getEnvironment } from "../typings/environment";
+
+const env = getEnvironment();
 
 export const main = async event => {
   /** @type {string} userId */
   const userId = event.requestContext.authorizer.claims.sub;
   const params = {
-    TableName: process.env.COMPANIES_TABLE_NAME,
+    TableName: env.COMPANIES_TABLE_NAME,
     ExpressionAttributeValues: {
       ':userId': userId
     },
@@ -38,7 +41,7 @@ export const main = async event => {
   const uniqueToken = uuidv1();
 
   const updateParams = {
-    TableName: process.env.COMPANIES_TABLE_NAME,
+    TableName: env.COMPANIES_TABLE_NAME,
     Key: {
       companyId: company.companyId
     },
@@ -57,7 +60,7 @@ export const main = async event => {
     await dynamoDbLib.call('update', updateParams);
     console.log('Successfully update company');
 
-    const redirectUrl = `${process.env.STRIPE_CONNECT_URL}&client_id=${process.env.STRIPE_API_CLIENT_ID}&state=${uniqueToken}`;
+    const redirectUrl = `${env.STRIPE_CONNECT_URL}&client_id=${env.STRIPE_API_CLIENT_ID}&state=${uniqueToken}`;
     console.log(`Generate redirect URL: ${redirectUrl}`);
 
     return success(redirectUrl);

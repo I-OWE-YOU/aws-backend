@@ -2,10 +2,12 @@ import Stripe from 'stripe';
 import { v1 as uuidv1 } from 'uuid';
 import { badRequest, failure, success } from '../libs/response-lib';
 import * as dynamoDbLib from '../libs/dynamodb-lib';
+import { getEnvironment } from "../typings/environment";
 
+const env = getEnvironment();
 export const main = async event => {
   const stripeSignature = event.headers['Stripe-Signature'];
-  const stripe = Stripe(process.env.STRIPE_API_SECRET_KEY);
+  const stripe = Stripe(env.STRIPE_API_SECRET_KEY);
 
   console.log('Request:', JSON.stringify(event));
 
@@ -16,7 +18,7 @@ export const main = async event => {
     webhookEvent = stripe.webhooks.constructEvent(
       event.body,
       stripeSignature,
-      process.env.STRIPE_WEBHOOK_CHECKOUT_COMPLETED_SECRET_KEY // We are getting this one from Stripe Dashboard, when a webhook is created
+      env.STRIPE_WEBHOOK_CHECKOUT_COMPLETED_SECRET_KEY // We are getting this one from Stripe Dashboard, when a webhook is created
     );
   } catch (err) {
     console.error({ err, body: JSON.parse(event.body) });
@@ -42,7 +44,7 @@ export const main = async event => {
 const handleCheckoutSession = async session => {
   console.log(`Process the session with ID: ${session.id}, and save it in DB`);
   const params = {
-    TableName: process.env.COUPONS_TABLE_NAME,
+    TableName: env.COUPONS_TABLE_NAME,
     Item: {
       couponId: uuidv1(),
       sessionId: session.id,

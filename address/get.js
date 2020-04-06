@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { failure, success } from '../libs/response-lib';
+import { getEnvironment } from "../typings/environment";
 
 export const main = async event => {
   /**
@@ -7,9 +8,10 @@ export const main = async event => {
    * @property {string} houseNumber
    */
   const { postalCode, houseNumber } = event.pathParameters;
-  const geocodeEndpoint = process.env.GEOCODE_ENDPOINT;
-  const apiKey = process.env.GEOCODE_API_KEY;
-  const region = process.env.GEOCODE_REGION;
+  const env = getEnvironment();
+  const geocodeEndpoint = env.GEOCODE_ENDPOINT;
+  const apiKey = env.GEOCODE_API_KEY;
+  const region = env.GEOCODE_REGION;
 
   try {
     const response = await axios.get(geocodeEndpoint, {
