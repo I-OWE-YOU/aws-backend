@@ -1,11 +1,12 @@
 import { failure, resourceNotFound, success } from '../libs/response-lib';
 import * as dynamoDbLib from '../libs/dynamodb-lib';
+import { environment } from "../typings/environment";
 
 export const main = async event => {
   /** @type {string} id - UUID */
   const companyId = event.pathParameters.id;
   const params = {
-    TableName: process.env.COMPANIES_TABLE_NAME,
+    TableName: environment.COMPANIES_TABLE_NAME,
     Key: {
       companyId
     },

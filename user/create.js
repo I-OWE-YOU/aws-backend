@@ -1,4 +1,5 @@
 import * as dynamoDbLib from '../libs/dynamodb-lib';
+import { getEnvironment } from "../typings/environment";
 
 export const main = async event => {
   /**
@@ -8,7 +9,7 @@ export const main = async event => {
 	const { sub, email } = event.request.userAttributes;
 
 	const params = {
-		TableName: process.env.USERS_TABLE_NAME,
+		TableName: getEnvironment().USERS_TABLE_NAME,
 		Item: {
 			userId: sub,
 			email: email

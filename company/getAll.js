@@ -1,9 +1,10 @@
 import { failure, resourceNotFound, success } from '../libs/response-lib';
 import * as dynamoDbLib from '../libs/dynamodb-lib';
+import { getEnvironment } from "../typings/environment";
 
 export const main = async () => {
 	const params = {
-		TableName: process.env.COMPANIES_TABLE_NAME,
+		TableName: getEnvironment().COMPANIES_TABLE_NAME,
 		ProjectionExpression: 'email, companyId, companyName, lastName, firstName, city, stripeUserId, longitude, iban, houseNumber, acceptedTerms, kvk, latitude, zipCode, street'
 	};
 

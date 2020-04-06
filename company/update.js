@@ -2,6 +2,7 @@ import { failure, success, validationError } from '../libs/response-lib';
 import * as dynamoDbLib from '../libs/dynamodb-lib';
 import { companySchema } from '../validation/companySchema';
 import { flattenObject } from '../libs/utils-lib';
+import { getEnvironment } from "../typings/environment";
 
 export const main = async event => {
   /** @type {string} companyId - UUID */
@@ -24,7 +25,7 @@ export const main = async event => {
   }
 
   const params = {
-    TableName: process.env.COMPANIES_TABLE_NAME,
+    TableName: getEnvironment().COMPANIES_TABLE_NAME,
     Key: {
       companyId
     },

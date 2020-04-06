@@ -1,13 +1,16 @@
 import Stripe from 'stripe';
 import { failure, redirect, redirectWithError } from '../libs/response-lib';
 import * as dynamoDbLib from '../libs/dynamodb-lib';
+import { getEnvironment } from "../typings/environment";
+
+const env = getEnvironment();
 
 export const main = async event => {
   /** @type {string} code - authorization code returned from Stripe */
   const code = event.queryStringParameters.code;
   const stripeConnectToken = event.queryStringParameters.state;
   const params = {
-    TableName: process.env.COMPANIES_TABLE_NAME,
+    TableName: env.COMPANIES_TABLE_NAME,
     ExpressionAttributeValues: {
       ':stripeConnectToken': stripeConnectToken
     },
@@ -23,7 +26,7 @@ export const main = async event => {
       const error = 'resource_not_found';
       const errorMsg = 'The company does not exist in the DB';
       console.error({ error, errorMsg, stripeConnectToken });
-      return redirectWithError(process.env.APPLICATION_URL, error, errorMsg);
+      return redirectWithError(env.APPLICATION_URL, error, errorMsg);
     }
 
     company = response.Items[0];
@@ -36,7 +39,7 @@ export const main = async event => {
   /** @type {string} error */
   const error = event.queryStringParameters.error;
   console.log('Initialize Stripe');
-  const stripe = Stripe(process.env.STRIPE_API_SECRET_KEY);
+  const stripe = Stripe(env.STRIPE_API_SECRET_KEY);
 
   if (error) {
     /** @type {string} error_description */
@@ -45,7 +48,7 @@ export const main = async event => {
 
     await removeStripeConnectToken(company.companyId);
 
-    return redirectWithError(process.env.APPLICATION_URL, error, errorMsg);
+    return redirectWithError(env.APPLICATION_URL, error, errorMsg);
   }
 
   console.log('Try to connect the Company to Stripe');
@@ -66,7 +69,7 @@ export const main = async event => {
 
   const stripeUserId = response.stripe_user_id;
   const updateParams = {
-    TableName: process.env.COMPANIES_TABLE_NAME,
+    TableName: env.COMPANIES_TABLE_NAME,
     Key: {
       companyId: company.companyId
     },
@@ -91,7 +94,7 @@ export const main = async event => {
 
     console.log('Successfully update the company with Stripe account ID');
 
-    return redirect(process.env.APPLICATION_URL);
+    return redirect(env.APPLICATION_URL);
   } catch (e) {
     console.error(e);
     return failure({ status: false });
@@ -100,7 +103,7 @@ export const main = async event => {
 
 const removeStripeConnectToken = async companyId => {
   const params = {
-    TableName: process.env.COMPANIES_TABLE_NAME,
+    TableName: env.COMPANIES_TABLE_NAME,
     Key: {
       companyId
     },
