@@ -4,6 +4,7 @@ import { v1 as uuidv1 } from 'uuid';
 import { badRequest, failure, success } from '../libs/response-lib';
 import * as dynamoDbLib from '../libs/dynamodb-lib';
 import { getEnvironment } from '../libs/utils-lib';
+// eslint-disable-next-line no-unused-vars
 import typings from '../typings/coupon';
 import { sendCouponEmail } from '../email/send-coupon';
 
