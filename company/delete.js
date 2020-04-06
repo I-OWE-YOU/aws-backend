@@ -4,6 +4,11 @@ import * as dynamoDbLib from '../libs/dynamodb-lib';
 export const main = async event => {
   /** @type {string} companyId - UUID */
   const companyId = event.pathParameters.id;
+  const userId = event.requestContext.authorizer.claims.sub;
+
+  if (companyId !== userId) {
+    return failure({ status: false });
+  }
 
   const params = {
     TableName: process.env.COMPANIES_TABLE_NAME,

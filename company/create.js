@@ -1,4 +1,3 @@
-import { v1 as uuidv1 } from 'uuid';
 import * as dynamoDbLib from '../libs/dynamodb-lib';
 
 export const main = async event => {
@@ -7,7 +6,7 @@ export const main = async event => {
   const params = {
     TableName: process.env.COMPANIES_TABLE_NAME,
     Item: {
-      companyId: uuidv1(),
+      companyId: sub,
       userId: sub,
       email: email
     }

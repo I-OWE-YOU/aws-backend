@@ -6,7 +6,11 @@ import { flattenObject } from '../libs/utils-lib';
 export const main = async event => {
   /** @type {string} companyId - UUID */
   const companyId = event.pathParameters.id;
+  const userId = event.requestContext.authorizer.claims.sub;
 
+  if (companyId !== userId) {
+    return failure({ status: false });
+  }
   /** @type {import('../typings/company).Company} */
   const data = JSON.parse(event.body);
 

@@ -52,14 +52,6 @@ Resources:
         Principal: cognito-idp.amazonaws.com
         SourceArn: !Sub 'arn:#{AWS::Partition}:cognito-idp:#{AWS::Region}:#{AWS::AccountId}:userpool/#{CognitoUserPool}'
 
-    LambdaCreateUserExecutionPermission:
-      Type: AWS::Lambda::Permission
-      Properties: 
-        Action: lambda:InvokeFunction
-        FunctionName: "arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:backend-api-dev-userCreate"
-        Principal: cognito-idp.amazonaws.com
-        SourceArn: !Sub 'arn:#{AWS::Partition}:cognito-idp:#{AWS::Region}:#{AWS::AccountId}:userpool/#{CognitoUserPool}'
-
     # Cognito - Authorizer
     apiGatewayAuthorizer: 
       Type: AWS::ApiGateway::Authorizer
@@ -67,7 +59,8 @@ Resources:
         Name: cognitoAuthorizer
         Type: COGNITO_USER_POOLS
         IdentitySource: method.request.header.Authorization
-        RestApiId: 125v01hjy9
+        RestApiId:
+          Ref: 'ApiGatewayRestApi'
         ProviderARNs: 
           - 'arn:aws:cognito-idp:#{AWS::Region}:#{AWS::AccountId}:userpool/#{CognitoUserPool}'
     

@@ -101,9 +101,6 @@ functions:
             authorizerId:
               Ref: apiGatewayAuthorizer
 
-  userCreate:
-    handler: user/create.main
-
   testCognito:
     handler: handler.test1
     events:
@@ -117,7 +114,7 @@ functions:
               Ref: apiGatewayAuthorizer
 
   preSignupLambdaFunction:
-    handler: cognito/autoConfirmUser.main
+   handler: cognito/autoConfirmUser.main
 
   stripeConnectCallback:
     handler: stripe/connectCallback.main
