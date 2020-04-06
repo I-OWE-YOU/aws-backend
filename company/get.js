@@ -1,23 +1,18 @@
 import { failure, resourceNotFound, success } from '../libs/response-lib';
 import * as dynamoDbLib from '../libs/dynamodb-lib';
-import { environment } from "../typings/environment";
+import { getEnvironment } from "../typings/environment";
+import typings from "../typings/company";
 
 export const main = async event => {
   /** @type {string} id - UUID */
   const companyId = event.pathParameters.id;
-  const params = {
-    TableName: environment.COMPANIES_TABLE_NAME,
-    Key: {
-      companyId
-    },
-    ProjectionExpression: 'email, companyId, companyName, lastName, firstName, city, stripeUserId, longitude, iban, houseNumber, acceptedTerms, kvk, latitude, zipCode, street'
-  };
+
 
   try {
-    const result = await dynamoDbLib.call('get', params);
+    const company = getCompany(companyId);
 
-    if (result.Item) {
-      return success(result.Item);
+    if (company) {
+      return success(company);
     } else {
       return resourceNotFound({ status: false, error: 'Item not found!' });
     }
@@ -25,6 +20,22 @@ export const main = async event => {
     console.error(e);
     return failure({ status: false });
   }
-
-  return success('Get a company');
 };
+
+/**
+ * @param {string} companyId
+ * @return {typings.Company}
+ */
+export async function getCompany(companyId) {
+  const params = {
+    TableName: getEnvironment().COMPANIES_TABLE_NAME,
+    Key: {
+      companyId
+    },
+    ProjectionExpression: 'email, companyId, companyName, lastName, firstName, city, stripeUserId, longitude, iban, houseNumber, acceptedTerms, kvk, latitude, zipCode, street'
+  };
+
+  const result = await dynamoDbLib.call('get', params);
+
+  return result.Item;
+}

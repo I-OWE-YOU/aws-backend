@@ -8,9 +8,9 @@ A Serverless starter that adds ES7 syntax, serverless-offline, linting, environm
 - **Use ES7 syntax in your handler functions**
   - Use `import` and `export`
 - **Run API Gateway locally**
-  - Use `serverless offline start`
+  - Use `npx serverless offline start`
 - **Support for unit tests**
-  - Run `npm test` to run your tests
+  - Run `yarn test` to run your tests
 - **Sourcemaps for proper error messages**
   - Error message show the correct line numbers
   - Works in production with CloudWatch
