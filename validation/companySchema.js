@@ -13,7 +13,7 @@ export const companySchema = presenceMode =>
       .email()
       .presence(presenceMode),
     contactFirstName: Joi.string().presence(presenceMode),
-    contractInsertion: Joi.string().presence(presenceMode),
+    contactInsertion: Joi.string().presence(presenceMode),
     contractLastName: Joi.string().presence(presenceMode),
     iban: Joi.string().presence(presenceMode),
     kvk: Joi.number()
