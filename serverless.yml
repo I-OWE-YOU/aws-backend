@@ -154,13 +154,13 @@ functions:
       - http:
           path: stripe/checkout-completed
           method: post
-
-  sendCouponEmail:
-    handler: email/send-coupon.lambda.main
-    events:
-      - http:
-          path: coupon
-          method: get
+  # For quick testing only
+  # sendCouponEmail:
+  #   handler: email/send-coupon.lambda.main
+  #   events:
+  #     - http:
+  #         path: coupon
+  #         method: get
 
 resources:
   - ${file(resources/cognito.yml)}
