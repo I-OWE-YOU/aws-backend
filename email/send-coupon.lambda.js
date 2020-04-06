@@ -1,4 +1,5 @@
 import { sendCouponEmail } from './send-coupon';
+// eslint-disable-next-line no-unused-vars
 import typings from '../typings/coupon';
 import { noContent, failure } from '../libs/response-lib';
 

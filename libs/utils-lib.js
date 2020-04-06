@@ -35,6 +35,8 @@ export const flattenObject = ob => {
  * @property {string} STRIPE_API_CLIENT_ID
  * @property {string} STRIPE_CONNECT_URL
  * @property {string} APPLICATION_URL
+ * @property {string} WEBFRONTEND_URL
+ * @property {string} SEND_COUPON_EMAIL
  * @property {string} STRIPE_CHECKOUT_REDIRECT_SUCCESS
  * @property {string} STRIPE_CHECKOUT_REDIRECT_CANCEL
  * @property {boolean=} IS_OFFLINE

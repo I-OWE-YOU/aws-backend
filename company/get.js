@@ -1,6 +1,7 @@
 import { failure, resourceNotFound, success } from '../libs/response-lib';
 import * as dynamoDbLib from '../libs/dynamodb-lib';
 import { getEnvironment } from '../libs/utils-lib';
+// eslint-disable-next-line no-unused-vars
 import typings from "../typings/company";
 
 export const main = async event => {
@@ -28,7 +29,7 @@ export const main = async event => {
  */
 export async function getCompany(companyId) {
   const params = {
-    TableName: 'companies',//getEnvironment().COMPANIES_TABLE_NAME,
+    TableName: getEnvironment().COMPANIES_TABLE_NAME,
     Key: {
       companyId
     },

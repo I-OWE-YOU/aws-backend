@@ -2,26 +2,32 @@ import QRCode from 'qrcode';
 import AWS from "aws-sdk";
 
 import { getCompany } from '../company/get';
+// eslint-disable-next-line no-unused-vars
 import typings from '../typings/coupon';
+// eslint-disable-next-line no-unused-vars
 import typingsCompany from '../typings/company';
+import { getEnvironment } from '../libs/utils-lib';
 
 const simpleEmailService = new AWS.SES({ apiVersion: '2010-12-01' });
 
+const env = getEnvironment();
 /**
  * Send the email with coupon to customer
  * @param {typings.Coupon} coupon
  */
 export async function sendCouponEmail(coupon) {
 
-    // TODO environment variables
-    const tegoedjeEmail = "coupon@tegoedje.nu";
     console.log('Coupon', coupon);
 
     console.log('About to get the company');
     const company = await getCompany(coupon.companyId);
     console.log('Company', company);
 
-    const redeemUrl = `https://tegoedje.nu/redeem/` + coupon.couponId;
+    const appUrlWithoutTrailingSlash = env.WEBFRONTEND_URL.endsWith('/')
+        ? env.WEBFRONTEND_URL.sub(0, env.WEBFRONTEND_URL.length - 1)
+        : env.WEBFRONTEND_URL;
+
+    const redeemUrl = `${appUrlWithoutTrailingSlash}/redeem/${coupon.couponId}`;
     console.log('About to gen QR for url', redeemUrl);
     const qrCodeSrc = await QRCode.toDataURL(redeemUrl, { type: "image/jpeg" });
     const qrCodeBase64 = qrCodeSrc.split('base64,')[1];
@@ -34,10 +40,10 @@ export async function sendCouponEmail(coupon) {
         htmlBody,
         qrCodeBase64,
         receiverEmail: coupon.customerEmail,
-        senderEmail: tegoedjeEmail
+        senderEmail: env.SEND_COUPON_EMAIL
     });
 
-    // console.log('Sending email', request);
+    console.log('Sending email', request);
     const sendPromise = simpleEmailService.sendRawEmail(request).promise();
 
     const response = await sendPromise;
