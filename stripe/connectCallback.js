@@ -1,7 +1,7 @@
 import Stripe from 'stripe';
 import { failure, redirect, redirectWithError } from '../libs/response-lib';
 import * as dynamoDbLib from '../libs/dynamodb-lib';
-import { getEnvironment } from "../typings/environment";
+import { getEnvironment } from '../libs/utils-lib';
 
 const env = getEnvironment();
 

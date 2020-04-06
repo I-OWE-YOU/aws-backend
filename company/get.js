@@ -1,6 +1,6 @@
 import { failure, resourceNotFound, success } from '../libs/response-lib';
 import * as dynamoDbLib from '../libs/dynamodb-lib';
-import { getEnvironment } from "../typings/environment";
+import { getEnvironment } from '../libs/utils-lib';
 import typings from "../typings/company";
 
 export const main = async event => {
@@ -28,7 +28,7 @@ export const main = async event => {
  */
 export async function getCompany(companyId) {
   const params = {
-    TableName: getEnvironment().COMPANIES_TABLE_NAME,
+    TableName: 'companies',//getEnvironment().COMPANIES_TABLE_NAME,
     Key: {
       companyId
     },
