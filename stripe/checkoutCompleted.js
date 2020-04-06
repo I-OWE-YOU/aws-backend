@@ -1,8 +1,11 @@
 import Stripe from 'stripe';
 import { v1 as uuidv1 } from 'uuid';
+
 import { badRequest, failure, success } from '../libs/response-lib';
 import * as dynamoDbLib from '../libs/dynamodb-lib';
 import { getEnvironment } from "../typings/environment";
+import typings from '../typings/coupon';
+import { sendCouponEmail } from '../email/send-coupon';
 
 const env = getEnvironment();
 export const main = async event => {
@@ -31,30 +34,44 @@ export const main = async event => {
     console.log('`checkout.session.completed` event received');
 
     try {
-      await handleCheckoutSession(session);
+
+      /** @type {typings.Coupon} */
+      const coupon = {
+        couponId: uuidv1(),
+        sessionId: session.id,
+        customer: session.customer,
+        customerEmail: session.customer_email,
+        amount: session.display_items[0].amount,
+        paymentIntent: session.payment_intent,
+        companyId: session.metadata.companyId,
+        createdAt: Date.now()
+      };
+
+      await handleCheckoutSession(session, coupon);
+
+      try {
+        sendCouponEmail(coupon);
+      } catch (e) {
+        console.error('Error sending the email');
+        return failure(e);
+      }
+
     } catch (e) {
       console.error(e);
       return failure(e);
     }
+
+
   }
 
   return success({ received: true });
 };
 
-const handleCheckoutSession = async session => {
+const handleCheckoutSession = async (session, coupon) => {
   console.log(`Process the session with ID: ${session.id}, and save it in DB`);
   const params = {
     TableName: env.COUPONS_TABLE_NAME,
-    Item: {
-      couponId: uuidv1(),
-      sessionId: session.id,
-      customer: session.customer,
-      customerEmail: session.customer_email,
-      amount: session.display_items[0].amount,
-      paymentIntent: session.payment_intent,
-      companyId: session.metadata.companyId,
-      createdAt: Date.now()
-    }
+    Item: coupon
   };
 
   try {

@@ -8,6 +8,7 @@ package:
 plugins:
   - serverless-bundle # Package our functions with Webpack
   - serverless-offline
+  - ./plugins/offline-invalidate.js
   - serverless-dotenv-plugin # Load .env as environment variables
   - serverless-pseudo-parameters
 
@@ -151,6 +152,13 @@ functions:
       - http:
           path: stripe/checkout-completed
           method: post
+
+  sendCouponEmail:
+    handler: email/send-coupon.lambda.main
+    events:
+      - http:
+          path: coupon
+          method: get
 
 resources:
   - ${file(resources/cognito.yml)}

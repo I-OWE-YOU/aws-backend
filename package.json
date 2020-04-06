@@ -27,6 +27,7 @@
     "uuid": "^7.0.2"
   },
   "dependencies": {
+    "qrcode": "^1.4.4",
     "serverless-pseudo-parameters": "^2.5.0"
   }
 }
