@@ -53,6 +53,9 @@ provider:
         - dynamodb:DeleteItem
       Resource: 'arn:aws:dynamodb:eu-west-1:*:*'
 
+custom:
+  stage: ${opt:stage, self:provider.stage}
+  
 functions:
   # Defines an HTTP API endpoint that calls the main function in address/get.js
   # - path: url path is /address/{postalCode}/{houseNumber}
