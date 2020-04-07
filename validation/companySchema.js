@@ -15,16 +15,7 @@ export const companySchema = presenceMode =>
     contactFirstName: Joi.string().presence(presenceMode),
     contactInsertion: Joi.string().presence(presenceMode),
     contactLastName: Joi.string().presence(presenceMode),
-    iban: Joi.string().presence(presenceMode),
-    kvk: Joi.number()
-      .integer()
-      .min(10000000)
-      .max(99999999)
-      .presence(presenceMode)
-      .messages({
-        'number.min': '"kvk" should be 8 digits long',
-        'number.max': '"kvk" should be 8 digits long'
-      }),
+    companyDescription: Joi.string().presence(presenceMode),
     address: Joi.object({
       city: Joi.string().presence(presenceMode),
       houseNumber: Joi.string().presence(presenceMode),
