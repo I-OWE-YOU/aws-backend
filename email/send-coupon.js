@@ -99,8 +99,8 @@ function generateHtmlBody(coupon, company) {
     const htmlTemplate = `
 <div>
     <p>Nogmaals bedankt voor het kopen een Tegoedje ter waarde van €%%amount%% bij %%company%%.</p>
-    <p>Wanneer de zaken weer gaan lopen laten we het meteen weten en kunt u het Tegoedje komen verzilveren. De bijgevoegde QR code heb je hiervoor nodig. Dus bewaar deze email goed!</p>
-    <p>Deze coupon vervalt vóór 1 januari 2021 en kan niet worden ingewisseld voor contant geld.</p>
+    <p>Wanneer de zaken weer gaan lopen laten we het meteen weten, zodat u uw Tegoedje kunt komen verzilveren. De bijgevoegde QR code heb je hiervoor nodig. Bewaar deze e-mail dus goed!</p>
+    <p>Het Tegoedje vervalt 1 januari 2021 en kan niet worden ingewisseld voor contant geld.</p>
 </div>
 `;
     let htmlBody = htmlTemplate;
