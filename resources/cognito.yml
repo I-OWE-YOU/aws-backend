@@ -22,10 +22,10 @@ Resources:
     CognitoUserPool:
       Type: AWS::Cognito::UserPool
       Properties:
-        UserPoolName: cognito_sls_backend_user_pool
+        UserPoolName: ${self:custom.stage}_cognito_sls_backend_user_pool
         LambdaConfig:
-          PreSignUp: "arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:backend-api-dev-preSignupLambdaFunction"
-          PostConfirmation: "arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:backend-api-dev-companyCreate"
+          PreSignUp: "arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:backend-api-${self:custom.stage}-preSignupLambdaFunction"
+          PostConfirmation: "arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:backend-api-${self:custom.stage}-companyCreate"
         Policies:
           PasswordPolicy:
             MinimumLength: 7
@@ -40,7 +40,7 @@ Resources:
       Type: AWS::Lambda::Permission
       Properties: 
         Action: lambda:InvokeFunction
-        FunctionName: "arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:backend-api-dev-preSignupLambdaFunction"
+        FunctionName: "arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:backend-api-${self:custom.stage}-preSignupLambdaFunction"
         Principal: cognito-idp.amazonaws.com
         SourceArn: !Sub 'arn:#{AWS::Partition}:cognito-idp:#{AWS::Region}:#{AWS::AccountId}:userpool/#{CognitoUserPool}'
 
@@ -48,7 +48,7 @@ Resources:
       Type: AWS::Lambda::Permission
       Properties: 
         Action: lambda:InvokeFunction
-        FunctionName: "arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:backend-api-dev-companyCreate"
+        FunctionName: "arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:backend-api-${self:custom.stage}-companyCreate"
         Principal: cognito-idp.amazonaws.com
         SourceArn: !Sub 'arn:#{AWS::Partition}:cognito-idp:#{AWS::Region}:#{AWS::AccountId}:userpool/#{CognitoUserPool}'
 
@@ -68,14 +68,14 @@ Resources:
     CognitoUserPoolClient:
       Type: AWS::Cognito::UserPoolClient
       Properties:
-        ClientName: cognito_sls_backend_client
+        ClientName: ${self:custom.stage}_cognito_sls_backend_client
         UserPoolId:
           Ref: CognitoUserPool
     # Cognito - Identity
     CognitoIdentityPool:
       Type: AWS::Cognito::IdentityPool
       Properties:
-        IdentityPoolName: cognito_sls_backend_identity_pool
+        IdentityPoolName: ${self:custom.stage}_cognito_sls_backend_identity_pool
         AllowUnauthenticatedIdentities: false
         CognitoIdentityProviders:
           - ClientId:
