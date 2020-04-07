@@ -23,21 +23,19 @@ provider:
   # commit your .env.
   #
   environment:
+    STAGE: ${self:custom.stage}
     GEOCODE_API_KEY: ${env:GEOCODE_API_KEY}
     GEOCODE_ENDPOINT: ${env:GEOCODE_ENDPOINT}
     GEOCODE_REGION: ${env:GEOCODE_REGION}
     COMPANIES_TABLE_NAME: ${self:custom.stage}-companies
     USERS_TABLE_NAME: ${self:custom.stage}-users
     COUPONS_TABLE_NAME: ${self:custom.stage}-coupons
-    STRIPE_API_SECRET_KEY: ${env:STRIPE_API_SECRET_KEY}
-    STRIPE_API_CLIENT_ID: ${env:STRIPE_API_CLIENT_ID}
     STRIPE_CONNECT_URL: ${env:STRIPE_CONNECT_URL}
     APPLICATION_URL: ${env:APPLICATION_URL}
     WEBFRONTEND_URL: ${env:WEBFRONTEND_URL}
     SEND_COUPON_EMAIL: ${env:COUPON_EMAIL}
     STRIPE_CHECKOUT_REDIRECT_SUCCESS: ${env:STRIPE_CHECKOUT_REDIRECT_SUCCESS}
     STRIPE_CHECKOUT_REDIRECT_CANCEL: ${env:STRIPE_CHECKOUT_REDIRECT_CANCEL}
-    STRIPE_WEBHOOK_CHECKOUT_COMPLETED_SECRET_KEY: ${env:STRIPE_WEBHOOK_CHECKOUT_COMPLETED_SECRET_KEY}
 
   # 'iamRoleStatements' defines the permission policy for the Lambda function.
   # In this case Lambda functions are granted with permissions to access DynamoDB.

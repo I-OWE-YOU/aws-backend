@@ -1,7 +1,10 @@
 import Stripe from 'stripe';
+import * as secretManagerLib from '../libs/secretmanager-lib';
 import { failure, redirect, redirectWithError } from '../libs/response-lib';
 import * as dynamoDbLib from '../libs/dynamodb-lib';
 import { getEnvironment } from '../libs/utils-lib';
+// eslint-disable-next-line no-unused-vars
+import typings from '../typings/stripeSecrets';
 
 const env = getEnvironment();
 
@@ -38,8 +41,19 @@ export const main = async event => {
 
   /** @type {string} error */
   const error = event.queryStringParameters.error;
+  const secretName = `${env.STAGE}/stripe`;
+  /** @type {typings.StripeSecrets} */
+  let stripeSecrets;
+  try {
+    console.log(`Get secret with name ${secretName}`);
+    stripeSecrets = await secretManagerLib.getSecrets(secretName);
+  } catch (e) {
+    console.error(e);
+    return failure({ status: false });
+  }
+
   console.log('Initialize Stripe');
-  const stripe = Stripe(env.STRIPE_API_SECRET_KEY);
+  const stripe = Stripe(stripeSecrets.API_SECRET_KEY);
 
   if (error) {
     /** @type {string} error_description */

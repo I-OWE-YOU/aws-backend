@@ -7,11 +7,23 @@ import { getEnvironment } from '../libs/utils-lib';
 // eslint-disable-next-line no-unused-vars
 import typings from '../typings/coupon';
 import { sendCouponEmail } from '../email/send-coupon';
+import * as secretManagerLib from '../libs/secretmanager-lib';
 
 const env = getEnvironment();
 export const main = async event => {
   const stripeSignature = event.headers['Stripe-Signature'];
-  const stripe = Stripe(env.STRIPE_API_SECRET_KEY);
+
+  const secretName = `${env.STAGE}/stripe`;
+  let stripeSecrets;
+  try {
+    console.log(`Get secret with name ${secretName}`);
+    stripeSecrets = await secretManagerLib.getSecrets(secretName);
+  } catch (e) {
+    console.error(e);
+    return failure({ status: false });
+  }
+
+  const stripe = Stripe(stripeSecrets.API_SECRET_KEY);
 
   console.log('Request:', JSON.stringify(event));
 
@@ -22,7 +34,7 @@ export const main = async event => {
     webhookEvent = stripe.webhooks.constructEvent(
       event.body,
       stripeSignature,
-      env.STRIPE_WEBHOOK_CHECKOUT_COMPLETED_SECRET_KEY // We are getting this one from Stripe Dashboard, when a webhook is created
+      stripeSecrets.WEBHOOK_CHECKOUT_COMPLETED_SECRET_KEY // We are getting this one from Stripe Dashboard, when a webhook is created
     );
   } catch (err) {
     console.error({ err, body: JSON.parse(event.body) });
@@ -35,7 +47,6 @@ export const main = async event => {
     console.log('`checkout.session.completed` event received');
 
     try {
-
       /** @type {typings.Coupon} */
       const coupon = {
         couponId: uuidv1(),
@@ -56,13 +67,10 @@ export const main = async event => {
         console.error('Error sending the email');
         return failure(e);
       }
-
     } catch (e) {
       console.error(e);
       return failure(e);
     }
-
-
   }
 
   return success({ received: true });
