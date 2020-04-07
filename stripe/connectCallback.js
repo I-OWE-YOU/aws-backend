@@ -68,11 +68,11 @@ export const main = async event => {
   console.log('Connection with Stripe was successful');
 
   const stripeUserId = response.stripe_user_id;
-  const userDataFromStripe = await stripe.accounts.retrieve(stripeUserId)
+  const userDataFromStripe = await stripe.accounts.retrieve(stripeUserId);
 
   if (userDataFromStripe.error) {
     console.log('Failed to retrive user data from stripe');
-    console.error(userDataFromStripe.error);
+    console.error(userDataFromStripe);
     return failure(userDataFromStripe.error);
   }
 
