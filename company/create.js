@@ -9,7 +9,8 @@ export const main = async event => {
     Item: {
       companyId: sub,
       userId: sub,
-      email: email
+      email: email,
+      acceptedTerms: true
     }
   };
 
