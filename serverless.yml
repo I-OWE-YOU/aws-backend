@@ -26,9 +26,9 @@ provider:
     GEOCODE_API_KEY: ${env:GEOCODE_API_KEY}
     GEOCODE_ENDPOINT: ${env:GEOCODE_ENDPOINT}
     GEOCODE_REGION: ${env:GEOCODE_REGION}
-    COMPANIES_TABLE_NAME: ${env:COMPANIES_TABLE_NAME}
-    USERS_TABLE_NAME: ${env:USERS_TABLE_NAME}
-    COUPONS_TABLE_NAME: ${env:COUPONS_TABLE_NAME}
+    COMPANIES_TABLE_NAME: ${self:custom.stage}-companies
+    USERS_TABLE_NAME: ${self:custom.stage}-users
+    COUPONS_TABLE_NAME: ${self:custom.stage}-coupons
     STRIPE_API_SECRET_KEY: ${env:STRIPE_API_SECRET_KEY}
     STRIPE_API_CLIENT_ID: ${env:STRIPE_API_CLIENT_ID}
     STRIPE_CONNECT_URL: ${env:STRIPE_CONNECT_URL}
@@ -55,7 +55,7 @@ provider:
 
 custom:
   stage: ${opt:stage, self:provider.stage}
-  
+
 functions:
   # Defines an HTTP API endpoint that calls the main function in address/get.js
   # - path: url path is /address/{postalCode}/{houseNumber}
@@ -120,7 +120,7 @@ functions:
               Ref: apiGatewayAuthorizer
 
   preSignupLambdaFunction:
-   handler: cognito/autoConfirmUser.main
+    handler: cognito/autoConfirmUser.main
 
   stripeConnectCallback:
     handler: stripe/connectCallback.main

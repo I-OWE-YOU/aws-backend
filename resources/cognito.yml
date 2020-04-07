@@ -38,7 +38,7 @@ Resources:
 
     LambdaCognitoUserPoolExecutionPermission:
       Type: AWS::Lambda::Permission
-      Properties: 
+      Properties:
         Action: lambda:InvokeFunction
         FunctionName: "arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:backend-api-${self:custom.stage}-preSignupLambdaFunction"
         Principal: cognito-idp.amazonaws.com
@@ -46,24 +46,24 @@ Resources:
 
     LambdaCreateCompanyExecutionPermission:
       Type: AWS::Lambda::Permission
-      Properties: 
+      Properties:
         Action: lambda:InvokeFunction
         FunctionName: "arn:aws:lambda:#{AWS::Region}:#{AWS::AccountId}:function:backend-api-${self:custom.stage}-companyCreate"
         Principal: cognito-idp.amazonaws.com
         SourceArn: !Sub 'arn:#{AWS::Partition}:cognito-idp:#{AWS::Region}:#{AWS::AccountId}:userpool/#{CognitoUserPool}'
 
     # Cognito - Authorizer
-    apiGatewayAuthorizer: 
+    apiGatewayAuthorizer:
       Type: AWS::ApiGateway::Authorizer
-      Properties: 
+      Properties:
         Name: cognitoAuthorizer
         Type: COGNITO_USER_POOLS
         IdentitySource: method.request.header.Authorization
         RestApiId:
           Ref: 'ApiGatewayRestApi'
-        ProviderARNs: 
+        ProviderARNs:
           - 'arn:aws:cognito-idp:#{AWS::Region}:#{AWS::AccountId}:userpool/#{CognitoUserPool}'
-    
+
     # Cognito - Client
     CognitoUserPoolClient:
       Type: AWS::Cognito::UserPoolClient
@@ -96,7 +96,6 @@ Resources:
     CognitoAuthRole:
       Type: AWS::IAM::Role
       Properties:
-        RoleName: appAuthRole
         Path: /
         AssumeRolePolicyDocument:
           Version: "2012-10-17"
@@ -131,7 +130,6 @@ Resources:
     CognitoUnauthRole:
       Type: AWS::IAM::Role
       Properties:
-        RoleName: appUnauthRole
         Path: /
         AssumeRolePolicyDocument:
           Version: "2012-10-17"
@@ -157,4 +155,3 @@ Resources:
                     - "cognito-sync:*"
                     - "cognito-identity:*"
                   Resource: "*"
-                  
