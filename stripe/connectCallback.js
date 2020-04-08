@@ -85,12 +85,24 @@ export const main = async event => {
   const userDataFromStripe = await stripe.accounts.retrieve(stripeUserId);
 
   if (userDataFromStripe.error) {
-    console.log('Failed to retrive user data from stripe');
+    console.log('Failed to retrieve user data from stripe');
     console.error(userDataFromStripe);
     return failure(userDataFromStripe.error);
   }
 
-  const { business_profile, settings } = userDataFromStripe;
+  const { business_profile, settings, requirements } = userDataFromStripe;
+  const isVerified =
+    requirements.errors.length === 0 &&
+    requirements.disabled_reason.length === 0;
+
+  console.log(`This account is ${isVerified ? '' : 'NOT'} verified.`);
+
+  if (!isVerified) {
+    console.log({
+      errors: requirements.errors,
+      disabledReason: requirements.disabled_reason
+    });
+  }
 
   const updateParams = {
     TableName: env.COMPANIES_TABLE_NAME,
@@ -110,6 +122,10 @@ export const main = async event => {
         Value: business_profile.url,
         Action: 'PUT'
       },
+      isVerified: {
+        Value: isVerified,
+        Action: 'PUT'
+      },
       stripeConnectToken: {
         Action: 'DELETE'
       }
@@ -124,7 +140,9 @@ export const main = async event => {
   try {
     await dynamoDbLib.call('update', updateParams);
 
-    console.log('Successfully update the company with Stripe account ID, company name and company description');
+    console.log(
+      'Successfully update the company with Stripe account ID, company name and company description'
+    );
 
     return redirect(env.APPLICATION_URL);
   } catch (e) {
