@@ -156,6 +156,15 @@ functions:
       - http:
           path: stripe/checkout-completed
           method: post
+
+  stripeApplicationAccountDeauthorized:
+    role: readAndWriteToDynamoDbWithSecret
+    handler: stripe/accountApplicationDeauthorized.main
+    events:
+      - http:
+          path: stripe/account-application-deauthorized
+          method: post
+
   # For quick testing only
   # sendCouponEmail:
   #   handler: email/send-coupon.lambda.main
@@ -167,4 +176,3 @@ functions:
 resources:
   - ${file(resources/cognito.yml)}
   - ${file(resources/roles.yml)}
-
