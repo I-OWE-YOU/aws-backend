@@ -16,7 +16,7 @@ export const main = async () => {
     do {
       items = await dynamoDbLib.call('scan', params);
       items.Items.forEach(item => {
-        if (item.isVerified && item.stripeUserId.length > 0) {
+        if (item.isVerified && item.stripeUserId) {
           companies.push(item);
         }
       });
@@ -25,6 +25,7 @@ export const main = async () => {
 
     return success(companies);
   } catch (e) {
+    console.error(e);
     return failure({ status: false });
   }
 };
