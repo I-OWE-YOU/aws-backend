@@ -92,10 +92,11 @@ export const main = async event => {
 
   const { business_profile, settings, requirements } = userDataFromStripe;
   const isVerified =
-    requirements.errors.length === 0 &&
-    requirements.disabled_reason.length === 0;
+    requirements.errors.length === 0 && !requirements.disabled_reason;
 
-  console.log(`This account is ${isVerified ? '' : 'NOT'} verified.`);
+  console.log(
+    `The account "${stripeUserId}" is ${isVerified ? '' : 'NOT'} verified.`
+  );
 
   if (!isVerified) {
     console.log({
