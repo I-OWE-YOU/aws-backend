@@ -42,18 +42,10 @@ provider:
   iamRoleStatements:
     - Effect: Allow
       Action:
-        - dynamodb:DescribeTable
         - dynamodb:Query
         - dynamodb:Scan
         - dynamodb:GetItem
-        - dynamodb:PutItem
-        - dynamodb:UpdateItem
-        - dynamodb:DeleteItem
       Resource: 'arn:aws:dynamodb:eu-west-1:*:*'
-    - Effect: 'Allow'
-      Action:
-        - 'secretsmanager:GetSecretValue'
-      Resource: 'arn:aws:secretsmanager:eu-west-1:*:*'
 
 custom:
   stage: ${opt:stage, self:provider.stage}
@@ -83,9 +75,11 @@ functions:
           method: get
           cors: true
   companyCreate:
+    role: readAndWriteToDynamoDbWithoutSecret
     handler: company/create.main
 
   companyUpdate:
+    role: readAndWriteToDynamoDbWithoutSecret
     handler: company/update.main
     events:
       - http:
@@ -98,6 +92,7 @@ functions:
               Ref: apiGatewayAuthorizer
 
   companyDelete:
+    role: readAndWriteToDynamoDbWithoutSecret
     handler: company/delete.main
     events:
       - http:
@@ -122,9 +117,11 @@ functions:
               Ref: apiGatewayAuthorizer
 
   preSignupLambdaFunction:
+    role: readAndWriteToDynamoDbWithoutSecret
     handler: cognito/autoConfirmUser.main
 
   stripeConnectCallback:
+    role: readAndWriteToDynamoDbWithSecret
     handler: stripe/connectCallback.main
     events:
       - http:
@@ -132,6 +129,7 @@ functions:
           method: get
 
   stripeConnect:
+    role: readAndWriteToDynamoDbWithSecret
     handler: stripe/connect.main
     events:
       - http:
@@ -144,6 +142,7 @@ functions:
               Ref: apiGatewayAuthorizer
 
   stripeCheckoutSession:
+    role: readAndWriteToDynamoDbWithSecret
     handler: stripe/createCheckoutSession.main
     events:
       - http:
@@ -151,6 +150,7 @@ functions:
           method: get
 
   stripeCheckoutCompleted:
+    role: readAndWriteToDynamoDbWithSecret
     handler: stripe/checkoutCompleted.main
     events:
       - http:
@@ -166,3 +166,5 @@ functions:
 
 resources:
   - ${file(resources/cognito.yml)}
+  - ${file(resources/roles.yml)}
+
