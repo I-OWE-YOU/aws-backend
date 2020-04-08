@@ -68,16 +68,6 @@ export const main = async event => {
   console.log('Connection with Stripe was successful');
 
   const stripeUserId = response.stripe_user_id;
-  const userDataFromStripe = await stripe.accounts.retrieve(stripeUserId);
-
-  if (userDataFromStripe.error) {
-    console.log('Failed to retrive user data from stripe');
-    console.error(userDataFromStripe);
-    return failure(userDataFromStripe.error);
-  }
-
-  const { business_profile, settings } = userDataFromStripe;
-
   const updateParams = {
     TableName: env.COMPANIES_TABLE_NAME,
     Key: {
@@ -86,14 +76,6 @@ export const main = async event => {
     AttributeUpdates: {
       stripeUserId: {
         Value: stripeUserId,
-        Action: 'PUT'
-      },
-      companyName: {
-        Value: settings.dashboard.display_name,
-        Action: 'PUT'
-      },
-      companyDescription: {
-        Value: business_profile.url,
         Action: 'PUT'
       },
       stripeConnectToken: {
@@ -110,7 +92,7 @@ export const main = async event => {
   try {
     await dynamoDbLib.call('update', updateParams);
 
-    console.log('Successfully update the company with Stripe account ID, company name and company description');
+    console.log('Successfully update the company with Stripe account ID');
 
     return redirect(env.APPLICATION_URL);
   } catch (e) {
