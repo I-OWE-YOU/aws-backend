@@ -3,6 +3,9 @@ import { v1 as uuidv1 } from 'uuid';
 import { failure, resourceNotFound, success } from '../libs/response-lib';
 import * as dynamoDbLib from '../libs/dynamodb-lib';
 import { getEnvironment } from '../libs/utils-lib';
+import * as secretManagerLib from '../libs/secretmanager-lib';
+// eslint-disable-next-line no-unused-vars
+import typings from '../typings/stripeSecrets';
 
 const env = getEnvironment();
 
@@ -60,7 +63,13 @@ export const main = async event => {
     await dynamoDbLib.call('update', updateParams);
     console.log('Successfully update company');
 
-    const redirectUrl = `${env.STRIPE_CONNECT_URL}&client_id=${env.STRIPE_API_CLIENT_ID}&state=${uniqueToken}`;
+    const secretName = `${env.STAGE}/stripe`;
+
+    console.log(`Get secret for ${secretName}`);
+    /** @type {typings.StripeSecrets} */
+    const stripeSecrets = await secretManagerLib.getSecrets(secretName);
+
+    const redirectUrl = `${env.STRIPE_CONNECT_URL}&client_id=${stripeSecrets.API_CLIENT_ID}&state=${uniqueToken}`;
     console.log(`Generate redirect URL: ${redirectUrl}`);
 
     return success(redirectUrl);
