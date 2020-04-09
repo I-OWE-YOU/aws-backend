@@ -2,15 +2,14 @@ import { failure, resourceNotFound, success } from '../libs/response-lib';
 import * as dynamoDbLib from '../libs/dynamodb-lib';
 import { getEnvironment } from '../libs/utils-lib';
 // eslint-disable-next-line no-unused-vars
-import typings from "../typings/company";
+import typings from '../typings/company';
 
 export const main = async event => {
   /** @type {string} id - UUID */
   const companyId = event.pathParameters.id;
 
-
   try {
-    const company = getCompany(companyId);
+    const company = await getCompany(companyId);
 
     if (company) {
       return success(company);
@@ -33,7 +32,8 @@ export async function getCompany(companyId) {
     Key: {
       companyId
     },
-    ProjectionExpression: 'email, companyId, companyName, lastName, firstName, city, stripeUserId, longitude, iban, houseNumber, acceptedTerms, kvk, latitude, zipCode, street'
+    ProjectionExpression:
+      'email, companyId, companyName, lastName, firstName, city, stripeUserId, longitude, iban, houseNumber, acceptedTerms, kvk, latitude, zipCode, street'
   };
 
   const result = await dynamoDbLib.call('get', params);
