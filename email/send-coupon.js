@@ -104,7 +104,7 @@ function generateHtmlBody(coupon, company) {
 </div>
 `;
     let htmlBody = htmlTemplate;
-    htmlBody = replaceAll(htmlBody, '%%amount%%', coupon.amount);
+    htmlBody = replaceAll(htmlBody, '%%amount%%', coupon.amount / 100);
     htmlBody = replaceAll(htmlBody, '%%company%%', company.companyName);
 
     return htmlBody;
