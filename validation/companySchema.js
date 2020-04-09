@@ -12,9 +12,6 @@ export const companySchema = presenceMode =>
     email: Joi.string()
       .email()
       .presence(presenceMode),
-    contactFirstName: Joi.string().presence(presenceMode),
-    contactInsertion: Joi.string().allow('').presence(presenceMode),
-    contactLastName: Joi.string().presence(presenceMode),
     companyDescription: Joi.string().presence(presenceMode),
     address: Joi.object({
       city: Joi.string().presence(presenceMode),
