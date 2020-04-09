@@ -59,7 +59,7 @@ export const main = async event => {
 const generateUpdateExpression = data => {
   let output = 'SET';
   const flatten = flattenObject(data);
-  const arr = Object.keys(flatten);
+  const arr = Object.keys(flatten).filter(v => flatten[v]);
 
   arr.forEach((value, index) => {
     const isLast = index === arr.length - 1;
@@ -83,7 +83,7 @@ const generateUpdateExpression = data => {
 const generateExpressionAttributeValues = data => {
   const output = {};
   const flatten = flattenObject(data);
-  const arr = Object.keys(flatten);
+  const arr = Object.keys(flatten).filter(v => flatten[v]);
 
   arr.forEach(value => {
     output[`:${value}`] = flatten[value];
