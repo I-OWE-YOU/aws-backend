@@ -1,7 +1,7 @@
 /**
  * @typedef {Object} Coupon
  * @property {string} couponId
- * @property {number} amount
+ * @property {number} amount in cents
  * @property {string} companyId
  * @property {string} createdAt
  * @property {string} customer
