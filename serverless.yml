@@ -121,7 +121,7 @@ functions:
     handler: cognito/autoConfirmUser.main
 
   stripeConnectCallback:
-    role: readAndWriteToDynamoDbWithSecret
+    role: readAndWriteToDynamoDbWithSecretAndEmail
     handler: stripe/connectCallback.main
     events:
       - http:
@@ -129,7 +129,7 @@ functions:
           method: get
 
   stripeConnect:
-    role: readAndWriteToDynamoDbWithSecret
+    role: readAndWriteToDynamoDbWithSecretAndEmail
     handler: stripe/connect.main
     events:
       - http:
@@ -142,7 +142,7 @@ functions:
               Ref: apiGatewayAuthorizer
 
   stripeCheckoutSession:
-    role: readAndWriteToDynamoDbWithSecret
+    role: readAndWriteToDynamoDbWithSecretAndEmail
     handler: stripe/createCheckoutSession.main
     events:
       - http:
@@ -150,7 +150,7 @@ functions:
           method: get
 
   stripeCheckoutCompleted:
-    role: readAndWriteToDynamoDbWithSecret
+    role: readAndWriteToDynamoDbWithSecretAndEmail
     handler: stripe/checkoutCompleted.main
     events:
       - http:
@@ -158,7 +158,7 @@ functions:
           method: post
 
   stripeApplicationAccountDeauthorized:
-    role: readAndWriteToDynamoDbWithSecret
+    role: readAndWriteToDynamoDbWithSecretAndEmail
     handler: stripe/accountApplicationDeauthorized.main
     events:
       - http:

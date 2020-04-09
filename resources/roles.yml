@@ -39,7 +39,7 @@ Resources:
                     - dynamodb:UpdateItem
                     - dynamodb:DeleteItem
                   Resource: 'arn:aws:dynamodb:eu-west-1:*:*'
-  readAndWriteToDynamoDbWithSecret:
+  readAndWriteToDynamoDbWithSecretAndEmail:
         Type: AWS::IAM::Role
         Properties:
           Path: /
@@ -81,3 +81,15 @@ Resources:
                     Action:
                       - 'secretsmanager:GetSecretValue'
                     Resource: 'arn:aws:secretsmanager:eu-west-1:*:*'
+                  - Effect: Allow
+                    Action:
+                      - ses:SendRawEmail
+                    Resource:
+                      - 'Fn::Join':
+                        - ':'
+                        -
+                          - 'arn:aws:ses'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - 'identity/coupon@tegoedje.nu'
+                    
