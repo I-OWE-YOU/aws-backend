@@ -165,6 +165,14 @@ functions:
           path: stripe/account-application-deauthorized
           method: post
 
+  stripeAccountUpdated:
+    role: readAndWriteToDynamoDbWithSecret
+    handler: stripe/accountUpdated.main
+    events:
+      - http:
+          path: stripe/account-application-deauthorized
+          method: post
+
   # For quick testing only
   # sendCouponEmail:
   #   handler: email/send-coupon.lambda.main
