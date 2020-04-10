@@ -170,7 +170,7 @@ functions:
     handler: stripe/accountUpdated.main
     events:
       - http:
-          path: stripe/account-application-deauthorized
+          path: stripe/account-updated
           method: post
 
   # For quick testing only
