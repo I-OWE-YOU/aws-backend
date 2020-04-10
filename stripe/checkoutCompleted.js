@@ -65,6 +65,7 @@ export const main = async event => {
         await sendCouponEmail(coupon);
       } catch (e) {
         console.error('Error sending the email');
+        console.error(e);
         return failure(e);
       }
     } catch (e) {
