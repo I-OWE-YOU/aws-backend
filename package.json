@@ -4,9 +4,10 @@
   "description": "A Node.js starter for the Serverless Framework with async/await and unit test support",
   "main": "handler.js",
   "scripts": {
+    "serve": "npx serverless offline start",
     "test": "serverless-bundle test",
-    "deploy:dev": "sls deploy",
-    "deploy:prod": "sls deploy --stage prod --env production"
+    "deploy:dev": "npx serverless deploy",
+    "deploy:prod": "npx serverless deploy --stage prod --env production"
   },
   "author": "",
   "license": "MIT",
