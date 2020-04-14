@@ -17,7 +17,9 @@ export const main = async () => {
       items = await dynamoDbLib.call('scan', params);
       items.Items.forEach(item => {
         if (item.stripeUserId) {
-          companies.push(item);
+          // extract stripeUserId since we don't need this in response 
+          const { stripeUserId, ...rest } = item;
+          companies.push(rest);
         }
       });
       params.ExclusiveStartKey = items.LastEvaluatedKey;
