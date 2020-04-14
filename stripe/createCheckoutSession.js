@@ -22,16 +22,18 @@ export const main = async event => {
     Key: {
       companyId
     },
-    ProjectionExpression: 'stripeUserId'
+    ProjectionExpression: 'stripeUserId, companyName'
   };
 
   console.log(`Get the company with ID: ${companyId}`);
   let stripeUserId;
+  let companyName;
   try {
     const result = await dynamoDbLib.call('get', params);
 
     if (result.Item) {
       stripeUserId = result.Item.stripeUserId;
+      companyName = result.Item.companyName;
     } else {
       return resourceNotFound({ status: false, error: 'Item not found!' });
     }
@@ -69,7 +71,7 @@ export const main = async event => {
           }
         ],
         customer_email: customerEmail,
-        success_url: `${env.STRIPE_CHECKOUT_REDIRECT_SUCCESS}?session_id={CHECKOUT_SESSION_ID}`,
+        success_url: `${env.STRIPE_CHECKOUT_REDIRECT_SUCCESS}?session_id={CHECKOUT_SESSION_ID}&company_name=${companyName}`,
         cancel_url: env.STRIPE_CHECKOUT_REDIRECT_CANCEL,
         metadata: {
           companyId
