@@ -33,7 +33,7 @@ export async function getCompany(companyId) {
       companyId
     },
     ProjectionExpression:
-      'email, companyId, companyName, lastName, firstName, city, stripeUserId, longitude, iban, houseNumber, acceptedTerms, kvk, latitude, zipCode, street'
+      'companyId, companyName, city, longitude, latitude, houseNumber, zipCode, street, companyDescription, stripeUserId'
   };
 
   const result = await dynamoDbLib.call('get', params);

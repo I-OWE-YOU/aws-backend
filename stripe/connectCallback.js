@@ -5,6 +5,8 @@ import * as dynamoDbLib from '../libs/dynamodb-lib';
 import { getEnvironment } from '../libs/utils-lib';
 // eslint-disable-next-line no-unused-vars
 import typings from '../typings/stripeSecrets';
+import { companySchema } from '../validation/companySchema';
+import { validationError } from '../libs/response-lib';
 
 const env = getEnvironment();
 
@@ -103,6 +105,20 @@ export const main = async event => {
       errors: requirements.errors,
       disabledReason: requirements.disabled_reason
     });
+  }
+
+  const testValues = {
+    companyId: company.companyId,
+    stripeUserId: stripeUserId,
+    companyName: settings.dashboard.display_name,
+    companyDescription: business_profile.url,
+    isVerified: isVerified
+  };
+  try {
+    await companySchema('optional').validateAsync(testValues);
+  } catch (e) {
+    const errorMessages = e.details.map(detail => detail.message);
+    return validationError(errorMessages);
   }
 
   const updateParams = {
