@@ -6,7 +6,7 @@ export const main = async () => {
   const params = {
     TableName: getEnvironment().COMPANIES_TABLE_NAME,
     ProjectionExpression:
-      'email, companyId, companyName, lastName, firstName, city, stripeUserId, longitude, iban, houseNumber, acceptedTerms, kvk, latitude, zipCode, street, isVerified'
+      'companyId, companyName, city, houseNumber,longitude, latitude, zipCode, street, isVerified, companyDescription, stripeUserId'
   };
 
   let companies = [];

@@ -6,6 +6,8 @@ import { getEnvironment } from '../libs/utils-lib';
 import * as secretManagerLib from '../libs/secretmanager-lib';
 // eslint-disable-next-line no-unused-vars
 import typings from '../typings/stripeSecrets';
+import { companySchema } from '../validation/companySchema';
+import { validationError } from '../libs/response-lib';
 
 const env = getEnvironment();
 
@@ -38,6 +40,13 @@ export const main = async event => {
   } catch (e) {
     console.error(e);
     return failure({ status: false });
+  }
+  const testValues = { companyId: company.companyId };
+  try {
+    await companySchema('optional').validateAsync(testValues);
+  } catch (e) {
+    const errorMessages = e.details.map(detail => detail.message);
+    return validationError(errorMessages);
   }
 
   console.log('Generate a unique ID');
