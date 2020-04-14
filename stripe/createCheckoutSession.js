@@ -1,22 +1,31 @@
 import Stripe from 'stripe';
+import AWS from 'aws-sdk';
 
-import { failure, resourceNotFound, success } from '../libs/response-lib';
-import * as dynamoDbLib from '../libs/dynamodb-lib';
+import { failure, resourceNotFound, success, validationError } from '../libs/response-lib';
 import * as secretManagerLib from '../libs/secretmanager-lib';
 import { getEnvironment } from '../libs/utils-lib';
+import { couponCheckoutRequestSchema } from '../validation/couponCheckoutRequestSchema';
 // eslint-disable-next-line no-unused-vars
 import typings from '../typings/stripeSecrets';
 
 const env = getEnvironment();
 
 export const main = async event => {
-  /**
-   * @type {number} amount
-   * @type {string} companyId - uuid
-   * @type {string} customerEmail
-   */
-  const { amount, companyId, customerEmail } = event.queryStringParameters;
 
+  /** @type {CheckoutSessionRequestParams} */
+  let qsParams;
+  try {
+    qsParams = await couponCheckoutRequestSchema.validateAsync(event.queryStringParameters);
+  } catch (e) {
+    const errorMessages = e.details.map(detail => detail.message);
+    return validationError(errorMessages);
+  }
+
+  const { amount, companyId, customerEmail } = qsParams;
+
+  const dynamoDb = new AWS.DynamoDB.DocumentClient();
+
+  /** @type {AWS.DynamoDB.DocumentClient.GetItemInput} */
   const params = {
     TableName: env.COMPANIES_TABLE_NAME,
     Key: {
@@ -28,12 +37,13 @@ export const main = async event => {
   console.log(`Get the company with ID: ${companyId}`);
   let stripeUserId;
   try {
-    const result = await dynamoDbLib.call('get', params);
+    const result = await dynamoDb.get(params).promise();
 
     if (result.Item) {
       stripeUserId = result.Item.stripeUserId;
     } else {
-      return resourceNotFound({ status: false, error: 'Item not found!' });
+      console.warn(`Company with ID "${companyId}" not found`);
+      return resourceNotFound({ status: false, error: 'Company not found!' });
     }
   } catch (e) {
     console.error(e);
@@ -52,9 +62,11 @@ export const main = async event => {
   }
 
   console.log('Initialize Stripe');
+  /** @type {Stripe} */
   const stripe = Stripe(stripeSecrets.API_SECRET_KEY);
 
   console.log('Create a payment checkout session with Stripe');
+  /** @type {Stripe.Checkout.Session} */
   let session;
   try {
     session = await stripe.checkout.sessions.create(
