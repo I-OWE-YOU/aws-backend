@@ -1,4 +1,5 @@
 import Joi from '@hapi/joi';
+import { zipCodeRegex, houseNumberRegex } from './regexes';
 
 /** @param { Joi.PresenceMode } presenceMode */
 export const companySchema = presenceMode =>
@@ -29,16 +30,14 @@ export const companySchema = presenceMode =>
         // Allow string with number, letters, ' and -
         .presence(presenceMode),
       houseNumber: Joi.string()
-        .pattern(new RegExp(/^[0-9A-Za-z\s\-\/]+$/))
-        // Allow string with number, letters, ', - .
+        .pattern(houseNumberRegex)
         .presence(presenceMode),
       street: Joi.string()
         .pattern(new RegExp(/^[a-zA-Z\s\'\-]*$/i))
         // Allow string with letters, ' and -
         .presence(presenceMode),
       zipCode: Joi.string()
-        .pattern(new RegExp(/^[1-9][0-9]{3} ?(?!sa|sd|ss)[a-z]{2}$/i))
-        // Allow string in pattern NNNN + (optional space) + two letters
+        .pattern(zipCodeRegex)
         .presence(presenceMode),
       latitude: Joi.number().presence(presenceMode),
       longitude: Joi.number().presence(presenceMode)
