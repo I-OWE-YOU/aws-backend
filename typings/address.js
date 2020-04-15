@@ -4,6 +4,7 @@
  * @property {String} longt
  * @property {String} latt
  * @property {Alt} alt
+ * @property {Object} error
  */
 
 /**

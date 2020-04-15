@@ -1,13 +1,23 @@
 import axios from 'axios';
-import { failure, success } from '../libs/response-lib';
+import { failure, success, validationError } from '../libs/response-lib';
 import { getEnvironment } from '../libs/utils-lib';
+//eslint-disable-next-line no-unused-vars
+import { addressRequestSchema, AddressRequestParams } from '../validation/addressRequestSchema';
+//eslint-disable-next-line no-unused-vars
+import typings from '../typings/address';
 
 export const main = async event => {
-  /**
-   * @property {string} postalCode
-   * @property {string} houseNumber
-   */
-  const { postalCode, houseNumber } = event.pathParameters;
+
+  /** @type {AddressRequestParams} */
+  let pathParams;
+  try {
+    pathParams = await addressRequestSchema.validateAsync(event.pathParameters);
+  } catch (e) {
+    const errorMessages = e.details.map(detail => detail.message);
+    return validationError(errorMessages);
+  }
+  const { postalCode, houseNumber } = pathParams;
+
   const env = getEnvironment();
   const geocodeEndpoint = env.GEOCODE_ENDPOINT;
   const apiKey = env.GEOCODE_API_KEY;
@@ -24,8 +34,12 @@ export const main = async event => {
       }
     });
 
-    /** @type {import('../typings/address).Address} */
+    /** @type {typings.Address} */
     const data = response.data;
+
+    if (data.error) {
+      return failure(data.error);
+    }
 
     const address = {
       city: data.standard.city,

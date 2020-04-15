@@ -17,7 +17,8 @@ export const main = async () => {
       items = await dynamoDbLib.call('scan', params);
       items.Items.forEach(item => {
         if (item.stripeUserId) {
-          // extract stripeUserId since we don't need this in response 
+          // extract stripeUserId since we don't need this in response
+          //eslint-disable-next-line no-unused-vars
           const { stripeUserId, ...rest } = item;
           companies.push(rest);
         }
